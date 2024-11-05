@@ -12,15 +12,35 @@ import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DatabaseHelper
+import de.fhkiel.temi.robogguide.database.Items
+import de.fhkiel.temi.robogguide.database.Locations
+import de.fhkiel.temi.robogguide.database.Media
 import de.fhkiel.temi.robogguide.database.OrmHelper
+import de.fhkiel.temi.robogguide.database.Places
+import de.fhkiel.temi.robogguide.database.Texts
+import de.fhkiel.temi.robogguide.database.Transfers
 import org.json.JSONObject
 import java.io.IOException
+import java.sql.SQLException
 
 class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
+
+
     private var mRobot: Robot? = null
     private lateinit var database: DatabaseHelper
     private lateinit var mTourHelper : TourHelper
-    private var ormHelper: OrmHelper? = null
+    private lateinit var ormhelper : OrmHelper
+
+    //Lists to hold the data of each table
+    private val itemsList: MutableList<Items> = mutableListOf()
+    private val locationsList: MutableList<Locations> = mutableListOf()
+    private val mediaList: MutableList<Media> = mutableListOf()
+    private val placesList: MutableList<Places> = mutableListOf()
+    private val textsList: MutableList<Texts> = mutableListOf()
+    private val transfersList: MutableList<Transfers> = mutableListOf()
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         // use database
         val databaseName = "roboguide.db"
         database = DatabaseHelper(this, databaseName)
-        //ormHelper = OrmHelper(this)
+        ormhelper = OrmHelper(this)
 
 
         try {
@@ -95,6 +115,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     override fun onDestroy() {
         super.onDestroy()
         database.closeDatabase()
+        ormhelper.close()
     }
 
     override fun onRobotReady(isReady: Boolean) {
@@ -130,6 +151,48 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
        // mRobot?.goTo(location = "home base")
         mTourHelper.shortTour()
 
+    }
+
+    private fun loadData()
+    {
+        try {
+            val itemsDao = ormhelper.getItemsDao()
+            val locationsDao = ormhelper.getLocationsDao()
+            val mediaDao = ormhelper.getMediaDao()
+            val placesDao = ormhelper.getPlacesDao()
+            val textsDao = ormhelper.getTextsDao()
+            val transfersDao = ormhelper.getTransfersDao()
+
+            itemsDao.let { dao ->
+                itemsList.clear()
+                itemsList.addAll(dao.queryForAll())
+            }
+            locationsDao.let { dao ->
+                locationsList.clear()
+                locationsList.addAll(dao.queryForAll())
+            }
+            mediaDao.let { dao ->
+                mediaList.clear()
+                mediaList.addAll(dao.queryForAll())
+            }
+            placesDao.let { dao ->
+                placesList.clear()
+                placesList.addAll(dao.queryForAll())
+            }
+            textsDao.let { dao ->
+                textsList.clear()
+                textsList.addAll(dao.queryForAll())
+            }
+            transfersDao.let { dao ->
+                transfersList.clear()
+                transfersList.addAll(dao.queryForAll())
+            }
+
+
+
+        }catch (e: SQLException){
+            e.printStackTrace()
+        }
     }
 
 

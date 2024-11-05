@@ -19,7 +19,9 @@ class TourHelper(val locationsForTour: List<String>, val mRobot: Robot) : OnGoTo
 
 
     fun shortTour(){
+
         Log.i("TourHelper", "$locationsForTour")
+
         if(locationsForTour.isNotEmpty()){
             currentLocation = locationsForTour[0]
             mRobot.goTo(currentLocation)
