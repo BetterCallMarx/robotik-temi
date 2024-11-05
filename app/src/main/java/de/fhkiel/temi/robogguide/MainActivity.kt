@@ -1,5 +1,6 @@
 package de.fhkiel.temi.robogguide
 
+
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,13 +9,16 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
+import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DatabaseHelper
+import org.json.JSONObject
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), OnRobotReadyListener {
+class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
     private var mRobot: Robot? = null
     private lateinit var database: DatabaseHelper
+    private lateinit var mTourHelper : TourHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +27,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
         // use database
         val databaseName = "roboguide.db"
         database = DatabaseHelper(this, databaseName)
+
 
         try {
             database.initializeDatabase() // Initialize the database and copy it from assets
@@ -34,10 +39,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
             val sqLiteDatabase = database.getDatabase()
             */
 
-            val places = database.getTableDataAsJson("places") // Fetch data as JSON
-            val locations = database.getTableDataAsJson("locations") // Fetch data as JSON
-            Log.i("MainActivity", "Places: $places")
-            Log.i("MainActivity", "Locations: $locations")
+
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -45,8 +47,9 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
         // let robot speak on button click
         findViewById<Button>(R.id.btnSpeakHelloWorld).setOnClickListener {
-            speakHelloWorld("Hello World!")
+            speakHelloWorld("Hallo")
         }
+
 
         findViewById<Button>(R.id.btnSpeakLocations).setOnClickListener {
             speakLocations()
@@ -58,11 +61,21 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
         findViewById<Button>(R.id.btnGotoHomeBase).setOnClickListener {
             gotoHomeBase()
+           // shortTour()
         }
 
         findViewById<Button>(R.id.btnExitApp).setOnClickListener {
             finishAffinity()
         }
+    }
+
+    private fun createTour() {
+        val places: Map<String, JSONObject> = database.getTableDataAsJson("places") // Fetch data as JSON
+        val databaseLocations: Map<String, JSONObject> = database.getTableDataAsJson("locations") // Fetch data as JSON
+        Log.i("MainActivity", "Places: $places")
+        Log.i("MainActivity", "Locations: $databaseLocations")
+
+        mTourHelper = TourHelper(databaseLocations.values.map { jsonObject -> jsonObject.getString("name") }, mRobot!!)
     }
 
     override fun onStart() {
@@ -84,11 +97,11 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
         if (isReady){
             mRobot = Robot.getInstance()
             mRobot?.hideTopBar()        // hide top action bar
+            createTour()
 
             // hide pull-down bar
             val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
             Robot.getInstance().onStart(activityInfo)
-
         }
     }
 
@@ -110,7 +123,21 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     }
 
     private fun gotoHomeBase(){
-        mRobot?.goTo(location = "home base")
+       // mRobot?.goTo(location = "home base")
+        mTourHelper.shortTour()
+
     }
+
+
+
+    override fun onGoToLocationStatusChanged(
+        location: String,
+        status: String,
+        descriptionId: Int,
+        description: String
+    ) {
+        Log.i("test", "Location: $location $status")
+    }
+
 
 }
