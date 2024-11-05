@@ -12,6 +12,7 @@ import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DatabaseHelper
+import de.fhkiel.temi.robogguide.database.OrmHelper
 import org.json.JSONObject
 import java.io.IOException
 
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     private var mRobot: Robot? = null
     private lateinit var database: DatabaseHelper
     private lateinit var mTourHelper : TourHelper
+    private var ormHelper: OrmHelper? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         // use database
         val databaseName = "roboguide.db"
         database = DatabaseHelper(this, databaseName)
+        //ormHelper = OrmHelper(this)
 
 
         try {
