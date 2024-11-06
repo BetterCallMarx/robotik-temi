@@ -22,57 +22,70 @@ class TourHelper(
 
     ) : OnGoToLocationStatusChangedListener {
 
-    private var lastLocation : String = ""
-    private var currentLocationID : String = ""
+    private var currentLocation : Locations = Locations()
+
     private var currentLocationText: String = ""
-    private  var nextLocation: String = ""
-    private var currentStatus: String = ""
+
+    //The List containing the list that are going to be visited, is filled according to short or long tour
+    private var locationsToVisit: MutableList<Locations> = mutableListOf()
 
     //lists that holds the Texts, that are supposed to be spoken out
-    private var textsForLocations: Map<Int, Texts> =  mapOf<Int,Texts>()
-    private var textsForItems: Map<Items,Texts> = mapOf<Items,Texts>()
+    private var textsForLocations: Map<String, Texts?> =  mapOf<String,Texts>()
+    private var textsForItems: Map<Items,Texts?> = mapOf<Items,Texts>()
     private var textsForTransfers: Map<Transfers,Texts> = mapOf<Transfers,Texts>()
 
 
 
 
 
+    fun prepareShortTour(){
+
+        for(location in locations){
+            if(location.important == 1){
+                locationsToVisit.add(location)
+            }
+        }
+
+    }
+
 
 
     init {
         mRobot.addOnGoToLocationStatusChangedListener(this)
-        textsForLocations = mapListsLocations()
+
     }
 
-    fun mapListsLocations() : Map<Int,Texts>{
+
+    //create a map by
+    fun mapLocationToText() : Map<String, Texts?> {
+
         val textByLocationID = texts
             .filter{it.locations_id != null}
             .associateBy { it.locations_id!!}
 
-        return locations.associate{ location -> location.id to textByLocationID[location.id]!! }
+        return locations.associate { location ->
+            location.name to textByLocationID[location.id]
+        }
     }
 
-/*
+
     fun shortTour(){
 
         Log.i("TourHelper", "$locationsForTour")
 
-        if(locationsForTour.isNotEmpty()){
-            currentLocation = locationsForTour[0]
-            mRobot.goTo(currentLocation)
+
+        textsForLocations = mapLocationToText()
+
+        if(locationsToVisit.isNotEmpty()){
+            currentLocation.name = locationsToVisit[0].name
+            mRobot.goTo(currentLocation.name)
         }
 
     }
-*/
 
+
+    /*
     fun shortTour(locationsForTour: List<Locations>){
-        /*
-        val itemsLocations: MutableList<Items> = mutableListOf()
-
-        itemsLocations.forEach{ it ->
-
-        }
-        */
 
         if(locationsForTour.isNotEmpty()){
             if(locationsForTour[0].important == 1){
@@ -83,7 +96,7 @@ class TourHelper(
         }
 
     }
-
+    */
 
 
     fun speakText(text: String, isShowOnConversationLayer: Boolean = true){
@@ -93,7 +106,31 @@ class TourHelper(
         }
     }
 
+    //function to get the texts of the individuals items of the corresponding locations
+    fun getItemsForCurrentLocations(): Map<Items, Texts?> {
 
+        val itemsCurrentLocation: MutableList<Items> = mutableListOf()
+        val itemsCurrentLocationTexts: MutableList<Texts> = mutableListOf()
+        for(item in items){
+            if(item.locations_id == currentLocation.id){
+                itemsCurrentLocation.add(item)
+            }
+        }
+
+        for(text in texts){
+
+            for(item in itemsCurrentLocation){
+                if(text.items_id == item.id){
+                    itemsCurrentLocationTexts.add(text)
+                }
+            }
+        }
+
+        val textsByItemID = itemsCurrentLocationTexts.associateBy {it.items_id}
+
+        return itemsCurrentLocation.associateWith { item -> textsByItemID[item.id] }
+
+    }
 
     override fun onGoToLocationStatusChanged(
         location: String,
@@ -103,17 +140,24 @@ class TourHelper(
     ) {
         if(status == OnGoToLocationStatusChangedListener.COMPLETE){
 
-            currentLocationText =
-            speakText()
-            //speak(locations) the text about the location first
+            //TODO fill items text
+            //TODO speak(locations) the text about the location first
+            textsForItems = getItemsForCurrentLocations()
 
-            //speak(items) talk about each item
+            textsForLocations[currentLocation.name]?.let { speakText(it.text) }
 
-            val nextLocation = locationsForTour.indexOf(currentLocation)+1
-            if(nextLocation<locationsForTour.size){
-                currentLocation = locationsForTour[nextLocation]
-                mRobot.goTo(currentLocation)
-                //speak(transfer) speak about transfer
+            //TODO speak(items) talk about each item
+            for(item in textsForItems){
+                item.value?.let { speakText(it.text) }
+            }
+
+
+            val nextLocationIndex = locationsForTour.indexOf(currentLocation.name)+1
+
+            if(nextLocationIndex<locationsForTour.size){
+                currentLocation = locationsToVisit[nextLocationIndex]
+                mRobot.goTo(currentLocation.name)
+                //TODO speak(transfer) speak about transfer
 
             }
         }

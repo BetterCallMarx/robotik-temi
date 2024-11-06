@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         Log.i("MainActivity", "Places: $places")
         Log.i("MainActivity", "Locations: $databaseLocations")
 
-        mTourHelper = TourHelper(databaseLocations.values.map { jsonObject -> jsonObject.getString("name") }, mRobot!!)
+        //mTourHelper = TourHelper(databaseLocations.values.map { jsonObject -> jsonObject.getString("name") }, mRobot!!)
     }
 
     override fun onStart() {

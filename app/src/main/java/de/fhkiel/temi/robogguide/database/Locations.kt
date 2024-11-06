@@ -10,7 +10,7 @@ data class Locations(
     val id: Int,
 
     @DatabaseField(columnName = "name")
-    val name: String,
+    var name: String,
 
     @DatabaseField(columnName = "important")
     val important: Int,

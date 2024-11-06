@@ -12,8 +12,8 @@ data class Items(
     val name: String,
 
     @DatabaseField(columnName = "locations_id", foreign = true)
-    val locations_id: String
+    val locations_id: Int
 ) {
 
-    constructor(): this(0,"","")
+    constructor(): this(0,"",0)
 }
