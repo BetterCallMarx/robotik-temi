@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         val databaseName = "roboguide.db"
         database = DatabaseHelper(this, databaseName)
         ormhelper = OrmHelper(this)
-
+        loadData()
 
         try {
             database.initializeDatabase() // Initialize the database and copy it from assets
@@ -94,6 +94,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     }
 
     private fun createTour() {
+
         val places: Map<String, JSONObject> = database.getTableDataAsJson("places") // Fetch data as JSON
         val databaseLocations: Map<String, JSONObject> = database.getTableDataAsJson("locations") // Fetch data as JSON
         Log.i("MainActivity", "Places: $places")
@@ -149,12 +150,10 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
     private fun gotoHomeBase(){
        // mRobot?.goTo(location = "home base")
-        mTourHelper.shortTour()
 
     }
 
-    private fun loadData()
-    {
+    private fun loadData(){
         try {
             val itemsDao = ormhelper.getItemsDao()
             val locationsDao = ormhelper.getLocationsDao()
@@ -193,6 +192,10 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         }catch (e: SQLException){
             e.printStackTrace()
         }
+    }
+
+    private fun sortData(){
+
     }
 
 
