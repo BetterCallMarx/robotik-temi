@@ -11,6 +11,7 @@ import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
+import de.fhkiel.temi.robogguide.database.DataLoader
 import de.fhkiel.temi.robogguide.database.DatabaseHelper
 import de.fhkiel.temi.robogguide.database.Items
 import de.fhkiel.temi.robogguide.database.Locations
@@ -19,6 +20,7 @@ import de.fhkiel.temi.robogguide.database.OrmHelper
 import de.fhkiel.temi.robogguide.database.Places
 import de.fhkiel.temi.robogguide.database.Texts
 import de.fhkiel.temi.robogguide.database.Transfers
+import de.fhkiel.temi.robogguide.real.Location
 import org.json.JSONObject
 import java.io.IOException
 import java.sql.SQLException
@@ -27,47 +29,25 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
 
     private var mRobot: Robot? = null
-    private lateinit var database: DatabaseHelper
     private lateinit var mTourHelper : TourHelper
-    private lateinit var ormhelper : OrmHelper
 
-    //Lists to hold the data of each table
-    private val itemsList: MutableList<Items> = mutableListOf()
-    private val locationsList: MutableList<Locations> = mutableListOf()
-    private val mediaList: MutableList<Media> = mutableListOf()
-    private val placesList: MutableList<Places> = mutableListOf()
-    private val textsList: MutableList<Texts> = mutableListOf()
-    private val transfersList: MutableList<Transfers> = mutableListOf()
 
 
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // use database
-        val databaseName = "roboguide.db"
-        database = DatabaseHelper(this, databaseName)
-        ormhelper = OrmHelper(this)
-        loadData()
-
-        try {
-            database.initializeDatabase() // Initialize the database and copy it from assets
-
-            /*
-            // EXAMPLE CODE TO ONLY COPY DATABASE TO DIRECTLY USE THE DATABASE FILE
-            database.initializeDatabase(withOpen = false)
-            val dbFile = database.getDBFile()
-            val sqLiteDatabase = database.getDatabase()
-            */
+        DataLoader.initData(this)
+        mTourHelper = TourHelper(mRobot)
+        Log.i("Places" ,"${DataLoader.places}")
+        Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
+        Log.i("Transfers" ,"${DataLoader.transfers}")
 
 
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
 
         // let robot speak on button click
         findViewById<Button>(R.id.btnSpeakHelloWorld).setOnClickListener {
@@ -94,12 +74,12 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     }
 
     private fun createTour() {
-
+        /*
         val places: Map<String, JSONObject> = database.getTableDataAsJson("places") // Fetch data as JSON
         val databaseLocations: Map<String, JSONObject> = database.getTableDataAsJson("locations") // Fetch data as JSON
         Log.i("MainActivity", "Places: $places")
         Log.i("MainActivity", "Locations: $databaseLocations")
-
+*/
         //mTourHelper = TourHelper(databaseLocations.values.map { jsonObject -> jsonObject.getString("name") }, mRobot!!)
     }
 
@@ -115,8 +95,8 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
     override fun onDestroy() {
         super.onDestroy()
-        database.closeDatabase()
-        ormhelper.close()
+        //database.closeDatabase()
+        //ormhelper.close()
     }
 
     override fun onRobotReady(isReady: Boolean) {
@@ -149,50 +129,11 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     }
 
     private fun gotoHomeBase(){
-       // mRobot?.goTo(location = "home base")
-
+        var list: List<Location> = DataLoader.places[0].locations
+        mTourHelper.shortTour(list)
     }
 
-    private fun loadData(){
-        try {
-            val itemsDao = ormhelper.getItemsDao()
-            val locationsDao = ormhelper.getLocationsDao()
-            val mediaDao = ormhelper.getMediaDao()
-            val placesDao = ormhelper.getPlacesDao()
-            val textsDao = ormhelper.getTextsDao()
-            val transfersDao = ormhelper.getTransfersDao()
 
-            itemsDao.let { dao ->
-                itemsList.clear()
-                itemsList.addAll(dao.queryForAll())
-            }
-            locationsDao.let { dao ->
-                locationsList.clear()
-                locationsList.addAll(dao.queryForAll())
-            }
-            mediaDao.let { dao ->
-                mediaList.clear()
-                mediaList.addAll(dao.queryForAll())
-            }
-            placesDao.let { dao ->
-                placesList.clear()
-                placesList.addAll(dao.queryForAll())
-            }
-            textsDao.let { dao ->
-                textsList.clear()
-                textsList.addAll(dao.queryForAll())
-            }
-            transfersDao.let { dao ->
-                transfersList.clear()
-                transfersList.addAll(dao.queryForAll())
-            }
-
-
-
-        }catch (e: SQLException){
-            e.printStackTrace()
-        }
-    }
 
     private fun sortData(){
 

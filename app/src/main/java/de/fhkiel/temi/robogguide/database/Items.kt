@@ -11,7 +11,7 @@ data class Items(
     @DatabaseField(columnName = "name")
     val name: String,
 
-    @DatabaseField(columnName = "locations_id", foreign = true)
+    @DatabaseField(columnName = "locations_id")
     val locations_id: Int
 ) {
 

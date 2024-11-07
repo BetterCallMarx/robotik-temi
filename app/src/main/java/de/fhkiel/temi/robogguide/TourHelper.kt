@@ -1,6 +1,5 @@
 package de.fhkiel.temi.robogguide
 
-import android.location.Location
 import android.util.Log
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
@@ -10,24 +9,28 @@ import de.fhkiel.temi.robogguide.database.Locations
 import de.fhkiel.temi.robogguide.database.Places
 import de.fhkiel.temi.robogguide.database.Texts
 import de.fhkiel.temi.robogguide.database.Transfers
+import de.fhkiel.temi.robogguide.real.Location
 import org.json.JSONObject
 
 class TourHelper(
+    /*
     val locations: List<Locations>,
     val texts: List<Texts>,
     val items: List<Items>,
     val transfers: List<Transfers>,
     val locationsForTour: List<String>,
+    */
+
     val mRobot: Robot
 
     ) : OnGoToLocationStatusChangedListener {
 
-    private var currentLocation : Locations = Locations()
+    lateinit var currentLocation : Location
 
     private var currentLocationText: String = ""
 
     //The List containing the list that are going to be visited, is filled according to short or long tour
-    private var locationsToVisit: MutableList<Locations> = mutableListOf()
+    private var locationsToVisit: MutableList<Location> = mutableListOf()
 
     //lists that holds the Texts, that are supposed to be spoken out
     private var textsForLocations: Map<String, Texts?> =  mapOf<String,Texts>()
@@ -42,7 +45,7 @@ class TourHelper(
 
         for(location in locations){
             if(location.important == 1){
-                locationsToVisit.add(location)
+                //locationsToVisit.add(location)
             }
         }
 
@@ -53,6 +56,14 @@ class TourHelper(
     init {
         mRobot.addOnGoToLocationStatusChangedListener(this)
 
+    }
+
+    fun shortTour(plocationsToVisit: List<Location>){
+        locationsToVisit = plocationsToVisit.toMutableList()
+        if(locationsToVisit.isNotEmpty()){
+            currentLocation.name = locationsToVisit[0].name
+            mRobot.goTo(currentLocation.name)
+        }
     }
 
 
@@ -142,7 +153,7 @@ class TourHelper(
 
             //TODO fill items text
             //TODO speak(locations) the text about the location first
-            textsForItems = getItemsForCurrentLocations()
+            //textsForItems = getItemsForCurrentLocations()
 
             textsForLocations[currentLocation.name]?.let { speakText(it.text) }
 

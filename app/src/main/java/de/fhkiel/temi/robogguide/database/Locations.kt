@@ -15,7 +15,7 @@ data class Locations(
     @DatabaseField(columnName = "important")
     val important: Int,
 
-    @DatabaseField(columnName = "places_id", foreign = true)
+    @DatabaseField(columnName = "places_id")
     val places_id: Int
 
 ) {

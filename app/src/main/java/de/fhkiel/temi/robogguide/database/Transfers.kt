@@ -12,10 +12,10 @@ data class Transfers (
     @DatabaseField(columnName = "title")
     val title: String,
 
-    @DatabaseField(columnName = "location_from", foreign = true)
+    @DatabaseField(columnName = "location_from")
     val location_from: Int,
 
-    @DatabaseField(columnName = "location_to", foreign = true)
+    @DatabaseField(columnName = "location_to")
     val location_to: Int,
 )
 {

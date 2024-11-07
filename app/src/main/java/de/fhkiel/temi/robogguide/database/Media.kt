@@ -12,7 +12,7 @@ data class Media (
     @DatabaseField(canBeNull = false, columnName = "url")
     val url: String,
 
-    @DatabaseField(canBeNull = false, foreign = true, columnName = "texts_id")
+    @DatabaseField(canBeNull = false,  columnName = "texts_id")
     val texts_id: Int
 )
 {  constructor() : this(0,"",0) }

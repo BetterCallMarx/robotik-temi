@@ -17,13 +17,13 @@ data class Texts(
     @DatabaseField(columnName = "detailed")
     val detailed: Int,
 
-    @DatabaseField(columnName = "locations_id", foreign = true)
+    @DatabaseField(columnName = "locations_id")
     val locations_id: Int,
 
-    @DatabaseField(columnName = "items_id", foreign = true)
+    @DatabaseField(columnName = "items_id")
     val items_id: Int,
 
-    @DatabaseField(columnName = "transfers_id", foreign = true)
+    @DatabaseField(columnName = "transfers_id")
     val transfers_id: Int,
 
 

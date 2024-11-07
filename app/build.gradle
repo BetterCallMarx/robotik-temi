@@ -11,7 +11,7 @@ android {
         applicationId "de.fhkiel.temi.robogguide"
         minSdk 30
         //noinspection OldTargetApi
-        targetSdk 34
+        targetSdk 33
         //noinspection OldTargetApi
         versionCode 2
         versionName "0.0.1a"
@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation("com.robotemi:sdk:1.134.1")
-    implementation 'com.j256.ormlite:ormlite-core:6.1'
-    implementation 'com.j256.ormlite:ormlite-android:6.1'
+    implementation 'com.j256.ormlite:ormlite-core:5.1'
+    implementation 'com.j256.ormlite:ormlite-android:5.1'
     implementation 'com.google.android.libraries.places:places:4.0.0'
 }
