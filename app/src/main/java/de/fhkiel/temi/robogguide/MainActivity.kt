@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
     private var mRobot: Robot? = null
     private lateinit var mTourHelper : TourHelper
+    private lateinit var tourManager: TourManager
 
 
 
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         DataLoader.initData(this)
-        mTourHelper = TourHelper(mRobot)
+
         Log.i("Places" ,"${DataLoader.places}")
         Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
         Log.i("Transfers" ,"${DataLoader.transfers}")
@@ -73,15 +74,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         }
     }
 
-    private fun createTour() {
-        /*
-        val places: Map<String, JSONObject> = database.getTableDataAsJson("places") // Fetch data as JSON
-        val databaseLocations: Map<String, JSONObject> = database.getTableDataAsJson("locations") // Fetch data as JSON
-        Log.i("MainActivity", "Places: $places")
-        Log.i("MainActivity", "Locations: $databaseLocations")
-*/
-        //mTourHelper = TourHelper(databaseLocations.values.map { jsonObject -> jsonObject.getString("name") }, mRobot!!)
-    }
+
 
     override fun onStart() {
         super.onStart()
@@ -103,8 +96,6 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         if (isReady){
             mRobot = Robot.getInstance()
             mRobot?.hideTopBar()        // hide top action bar
-            createTour()
-
             // hide pull-down bar
             val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
             Robot.getInstance().onStart(activityInfo)
@@ -130,14 +121,10 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
     private fun gotoHomeBase(){
         var list: List<Location> = DataLoader.places[0].locations
-        mTourHelper.shortTour(list)
-    }
-
-
-
-    private fun sortData(){
 
     }
+
+
 
 
 

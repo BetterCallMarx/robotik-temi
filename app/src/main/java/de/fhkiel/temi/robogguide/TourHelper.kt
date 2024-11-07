@@ -24,7 +24,7 @@ class TourHelper(
     val mRobot: Robot
 
     ) : OnGoToLocationStatusChangedListener {
-
+    /*
     lateinit var currentLocation : Location
 
     private var currentLocationText: String = ""
@@ -59,7 +59,9 @@ class TourHelper(
     }
 
     fun shortTour(plocationsToVisit: List<Location>){
+
         locationsToVisit = plocationsToVisit.toMutableList()
+
         if(locationsToVisit.isNotEmpty()){
             currentLocation.name = locationsToVisit[0].name
             mRobot.goTo(currentLocation.name)
@@ -173,5 +175,13 @@ class TourHelper(
             }
         }
     }
-
+**/
+    override fun onGoToLocationStatusChanged(
+        location: String,
+        status: String,
+        descriptionId: Int,
+        description: String
+    ) {
+        TODO("Not yet implemented")
+    }
 }
