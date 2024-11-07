@@ -11,6 +11,8 @@ import com.robotemi.sdk.TtsRequest
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DatabaseHelper
 import java.io.IOException
+import android.content.Intent
+
 
 class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     private var mRobot: Robot? = null
@@ -38,6 +40,13 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
             val locations = database.getTableDataAsJson("locations") // Fetch data as JSON
             Log.i("MainActivity", "Places: $places")
             Log.i("MainActivity", "Locations: $locations")
+
+
+            findViewById<Button>(R.id.btnTourSelection).setOnClickListener {
+                val intent = Intent(this, TourSelectionActivity::class.java)
+                startActivity(intent)
+            }
+
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -112,5 +121,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     private fun gotoHomeBase(){
         mRobot?.goTo(location = "home base")
     }
+
+
 
 }

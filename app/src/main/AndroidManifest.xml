@@ -23,7 +23,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
+
         </activity>
+
+
+        <activity android:name="TourSelectionActivity" />
+
 
         <!-- INCLUDE TEMI SDK -->
         <meta-data
@@ -39,6 +46,10 @@
         <meta-data
             android:name="com.robotemi.sdk.metadata.UI_MODE"
             android:value="4" />
+
+
+
+
 
     </application>
 

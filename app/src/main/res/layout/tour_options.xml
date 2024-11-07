@@ -1,30 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <!-- Titel der Seite -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wählen Sie die Art der Führung"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="24dp" />
+
+    <!-- Kurz oder Lang Auswahl -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dauer der Führung"
+        android:textSize="18sp"
+        android:paddingBottom="12dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupDauer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/rbKurz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kurz" />
+
+        <RadioButton
+            android:id="@+id/rbLang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lang"
+            android:layout_marginStart="24dp" />
+    </RadioGroup>
+
+    <!-- Einfach oder Ausführlich Auswahl -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Umfang der Führung"
+        android:textSize="18sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupUmfang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/rbEinfach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Einfach" />
+
+        <RadioButton
+            android:id="@+id/rbAusführlich"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ausführlich"
+            android:layout_marginStart="24dp" />
+    </RadioGroup>
+
+    <!-- Individuelle Führung Auswahl -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Individuelle Führung"
+        android:textSize="18sp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp" />
+
+    <!-- Bestätigungsbutton, der erst nach Auswahl erscheint -->
+    <Switch
+        android:id="@+id/switchIndividuell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:paddingBottom="24dp"
+        android:text="Aktivieren" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="111dp"
-        android:layout_height="64dp"
-        android:text="Alle"
-        tools:layout_editor_absoluteX="585dp"
-        tools:layout_editor_absoluteY="315dp" />
+        android:id="@+id/btnConfirmSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bestätigen"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:padding="12dp" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="145dp"
-        android:layout_height="64dp"
-        android:text="nur Wichtige"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="315dp" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="116dp"
-        android:layout_height="64dp"
-        android:text="Individuel"
-        tools:layout_editor_absoluteX="1009dp"
-        tools:layout_editor_absoluteY="315dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
