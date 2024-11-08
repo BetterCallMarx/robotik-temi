@@ -70,36 +70,8 @@ class TourManager(
 
         if (status == OnGoToLocationStatusChangedListener.COMPLETE) {
 
+        tourStopListener()
 
-            thread {
-                Log.i("Arrived", "Bin angekommen")
-
-                //speak out every text for the location
-                speakTexts(currentLocation.texts)
-
-                //speak every location for each item
-                currentLocation.items.forEach {
-                    speakTexts(it.texts)
-                }
-
-                Log.i("Arrived", "Bin angekommen")
-                val nextLocationIndex: Int = (locationsToVisit.indexOf(currentLocation)) + 1
-
-                if (nextLocationIndex < locationsToVisit.size) {
-                    val nextLocation: Location = locationsToVisit[nextLocationIndex]
-                    Log.i("Next", "Als nächstes $nextLocation")
-                    mRobot.goTo(nextLocation.name)
-
-                    val transferText: List<Transfer> = inputTransfers.filter { tr ->
-                        tr.locationFrom == currentLocation && tr.locationTo == nextLocation
-                    }
-
-                    transferText.forEach { t -> speakTextsTransfer(t.texts) }
-
-                    currentLocation = nextLocation
-                }
-
-            }
         }
     }
 
@@ -110,7 +82,7 @@ class TourManager(
         }
     }
 
-    private fun speakTexts(texts: List<Text>){
+    fun speakTexts(texts: List<Text>){
         speaking = true
         Log.i("Textstospeak","Start")
 
@@ -126,13 +98,18 @@ class TourManager(
         }
     }
 
-    private fun speakTextsTransfer(texts: List<Text>){
+    fun speakTextsTransfer(texts: List<Text>){
         texts.forEach { t ->
             if (t.detailed == detailedFlag) {
                 speak(t.text)
             }
 
         }
+    }
+    private var tourStopListener: () -> Unit = {}
+
+    fun registerAsTourStopListener(function: () -> Unit) {
+        tourStopListener = function
     }
 
 }

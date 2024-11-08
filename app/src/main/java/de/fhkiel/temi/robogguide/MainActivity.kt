@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.TtsRequest
@@ -22,19 +23,21 @@ import de.fhkiel.temi.robogguide.database.Places
 import de.fhkiel.temi.robogguide.database.Texts
 import de.fhkiel.temi.robogguide.database.Transfers
 import de.fhkiel.temi.robogguide.real.Location
+import de.fhkiel.temi.robogguide.real.Transfer
 import org.json.JSONObject
 import java.io.IOException
 import java.sql.SQLException
+import kotlin.concurrent.thread
 
 
-class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
+class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
 
     private lateinit var mRobot: Robot
     private lateinit var mTourHelper : TourHelper
     private lateinit var tourManager: TourManager
 
-
+    private lateinit var dummyText: TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         setContentView(R.layout.activity_main)
         DataLoader.initData(this)
 
+        dummyText = findViewById<TextView>(R.id.dummyText)
 
         Log.i("Places" ,"${DataLoader.places}")
         Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
@@ -129,21 +133,46 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     private fun gotoHomeBase(){
         var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
         tourManager = TourManager(mRobot,DataLoader.transfers)
+        tourManager.registerAsTourStopListener{doTourStop()}
         tourManager.createShortTour(DataLoader.places[1].locations.toMutableList(),detailed = false)
         //runOnUiThread
     }
 
+    fun doTourStop(){
+        thread {
+            Log.i("Arrived", "Bin angekommen")
 
+            runOnUiThread {
+                dummyText.text = tourManager.currentLocation.name
+            }
 
+            //speak out every text for the location
+            tourManager.speakTexts(tourManager.currentLocation.texts)
 
+            //speak every location for each item
+            tourManager.currentLocation.items.forEach {
+                tourManager.speakTexts(it.texts)
+            }
 
-    override fun onGoToLocationStatusChanged(
-        location: String,
-        status: String,
-        descriptionId: Int,
-        description: String
-    ) {
-        Log.i("test", "Location: $location $status")
+            Log.i("Arrived", "Bin angekommen")
+            val nextLocationIndex: Int = (tourManager.locationsToVisit.indexOf(tourManager.currentLocation)) + 1
+
+            if (nextLocationIndex < tourManager.locationsToVisit.size) {
+                val nextLocation: Location = tourManager.locationsToVisit[nextLocationIndex]
+                Log.i("Next", "Als nächstes $nextLocation")
+                tourManager.mRobot.goTo(nextLocation.name)
+
+                val transferText: List<Transfer> = tourManager.inputTransfers.filter { tr ->
+                    tr.locationFrom == tourManager.currentLocation && tr.locationTo == nextLocation
+                }
+
+                transferText.forEach { t -> tourManager.speakTextsTransfer(t.texts) }
+
+                tourManager.currentLocation = nextLocation
+            }
+
+        }
+
     }
 
 
