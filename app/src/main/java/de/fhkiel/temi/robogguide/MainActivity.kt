@@ -99,8 +99,10 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
     override fun onRobotReady(isReady: Boolean) {
         if (isReady){
+
+            Log.i("test", "reADY")
             mRobot = Robot.getInstance()
-            mRobot?.hideTopBar()        // hide top action bar
+            mRobot.hideTopBar()        // hide top action bar
             // hide pull-down bar
             val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
             Robot.getInstance().onStart(activityInfo)
@@ -128,6 +130,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
         var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
         tourManager = TourManager(mRobot,DataLoader.transfers)
         tourManager.createShortTour(DataLoader.places[1].locations.toMutableList(),detailed = false)
+        //runOnUiThread
     }
 
 

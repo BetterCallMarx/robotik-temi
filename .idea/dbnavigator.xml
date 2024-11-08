@@ -9,6 +9,24 @@
     <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
+  <component name="DBNavigator.Project.DataExportManager">
+    <export-instructions>
+      <create-header value="true" />
+      <friendly-headers value="false" />
+      <quote-values-containing-separator value="true" />
+      <quote-all-values value="false" />
+      <value-separator value="" />
+      <begin-quote value="&quot;" />
+      <end-quote value="&quot;" />
+      <file-name value="" />
+      <file-location value="" />
+      <scope value="GLOBAL" />
+      <destination value="FILE" />
+      <format value="EXCEL" />
+      <charset value="windows-1252" />
+      <charset value="windows-1252" />
+    </export-instructions>
+  </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
@@ -24,21 +42,24 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" object-ref="schemas/main/tables/items" />
+      <object connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" object-ref="schemas/main/tables/texts" />
+      <object connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" object-ref="schemas/main/tables/transfers" />
+      <object connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" object-ref="schemas/main/tables/media" />
+      <object connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" object-ref="schemas/main/tables/locations" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="9d855e9a-85e9-461a-bd29-c0d1d302656c" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" dataset="main.places" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" dataset="main.items" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" dataset="main.locations" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" dataset="main.media" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" dataset="main.transfers" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="9d855e9a-85e9-461a-bd29-c0d1d302656c" dataset="main.texts" active-filter-id="EMPTY_FILTER" />
-    <filter-actions connection-id="1356feeb-b6f6-4018-b610-e59a43a825f8" dataset="main.places" active-filter-id="a555f868-4a21-417b-ba65-c035e6d9b272">
-      <filter id="a555f868-4a21-417b-ba65-c035e6d9b272" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="id" operator="=" value="" active="true" />
-      </filter>
-    </filter-actions>
-    <filter-actions connection-id="1356feeb-b6f6-4018-b610-e59a43a825f8" dataset="main.locations" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />

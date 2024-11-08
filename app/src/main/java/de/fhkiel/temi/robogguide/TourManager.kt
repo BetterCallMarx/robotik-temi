@@ -8,6 +8,7 @@ import de.fhkiel.temi.robogguide.real.Location
 import de.fhkiel.temi.robogguide.real.Text
 import de.fhkiel.temi.robogguide.real.Transfer
 import java.lang.Thread.sleep
+import kotlin.concurrent.thread
 
 class TourManager(
     val mRobot: Robot,
@@ -21,6 +22,8 @@ class TourManager(
     init {
         mRobot.addOnGoToLocationStatusChangedListener(this)
         mRobot.addTtsListener(this)
+
+        Log.i("TourManager", "Registered")
     }
 
     fun createShortTour(listLocations: MutableList<Location>, detailed: Boolean) {
@@ -66,35 +69,37 @@ class TourManager(
     ) {
 
         if (status == OnGoToLocationStatusChangedListener.COMPLETE) {
-            Log.i("Arrived", "Bin angekommen")
 
-            //speak out every text for the location
-            speakTexts(currentLocation.texts)
 
-            //speak every location for each item
-            currentLocation.items.forEach { speakTexts(it.texts)
-            }
+            thread {
+                Log.i("Arrived", "Bin angekommen")
 
-            val nextLocationIndex: Int = (locationsToVisit.indexOf(currentLocation)) + 1
+                //speak out every text for the location
+                speakTexts(currentLocation.texts)
 
-            if (nextLocationIndex < locationsToVisit.size) {
-                val nextLocation: Location = locationsToVisit[nextLocationIndex]
-                Log.i("Next", "Als nächstes $nextLocation")
-                mRobot.goTo(nextLocation.name)
+                //speak every location for each item
+                currentLocation.items.forEach {
+                    speakTexts(it.texts)
+                }
 
-                //find the corresponding transfer and output it
-                inputTransfers.filter { tr ->
-                    tr.locationFrom == currentLocation && tr.locationTo == nextLocation
-                }.forEach { tra ->
-                    tra.texts.forEach { t ->
-                        speak(t.text)
+                Log.i("Arrived", "Bin angekommen")
+                val nextLocationIndex: Int = (locationsToVisit.indexOf(currentLocation)) + 1
+
+                if (nextLocationIndex < locationsToVisit.size) {
+                    val nextLocation: Location = locationsToVisit[nextLocationIndex]
+                    Log.i("Next", "Als nächstes $nextLocation")
+                    mRobot.goTo(nextLocation.name)
+
+                    val transferText: List<Transfer> = inputTransfers.filter { tr ->
+                        tr.locationFrom == currentLocation && tr.locationTo == nextLocation
                     }
 
+                    transferText.forEach { t -> speakTextsTransfer(t.texts) }
+
+                    currentLocation = nextLocation
                 }
-                currentLocation = nextLocation
+
             }
-
-
         }
     }
 
@@ -107,14 +112,24 @@ class TourManager(
 
     private fun speakTexts(texts: List<Text>){
         speaking = true
+        Log.i("Textstospeak","Start")
+
         texts.forEach { t ->
             Log.i("Textstospeak",t.text)
             if (t.detailed == detailedFlag) {
                 speak(t.text)
                 while(speaking){
-                    Log.i("Textlocation", t.text)
                     sleep(100)
                 }
+            }
+
+        }
+    }
+
+    private fun speakTextsTransfer(texts: List<Text>){
+        texts.forEach { t ->
+            if (t.detailed == detailedFlag) {
+                speak(t.text)
             }
 
         }
