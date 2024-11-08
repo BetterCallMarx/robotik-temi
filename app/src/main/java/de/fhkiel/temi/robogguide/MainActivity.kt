@@ -28,7 +28,7 @@ import java.sql.SQLException
 class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
 
 
-    private var mRobot: Robot? = null
+    private lateinit var mRobot: Robot
     private lateinit var mTourHelper : TourHelper
     private lateinit var tourManager: TourManager
 
@@ -120,8 +120,9 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
     }
 
     private fun gotoHomeBase(){
-        var list: List<Location> = DataLoader.places[0].locations
-
+        var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
+        tourManager = TourManager(mRobot,DataLoader.transfers)
+        tourManager.createShortTour(DataLoader.places[1].locations.toMutableList(),detailed = false)
     }
 
 
