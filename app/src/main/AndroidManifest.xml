@@ -30,7 +30,7 @@
 
 
         <activity android:name="TourSelectionActivity" />
-
+        <activity android:name=".LevelSelect"/>
 
         <!-- INCLUDE TEMI SDK -->
         <meta-data

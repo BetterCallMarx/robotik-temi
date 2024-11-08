@@ -1,6 +1,7 @@
 package de.fhkiel.temi.robogguide
 
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -25,6 +26,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.sql.SQLException
 
+
 class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
 
 
@@ -35,18 +37,21 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener, OnGoToLocationSt
 
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
-
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         DataLoader.initData(this)
 
+
         Log.i("Places" ,"${DataLoader.places}")
         Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
         Log.i("Transfers" ,"${DataLoader.transfers}")
+
+        findViewById<Button>(R.id.Tour).setOnClickListener {
+            val intent = Intent(this, LevelSelect::class.java)
+            startActivity(intent)
+        }
 
 
 
