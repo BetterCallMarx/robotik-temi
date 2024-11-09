@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DataLoader
+import de.fhkiel.temi.robogguide.real.Item
 import de.fhkiel.temi.robogguide.real.Location
 import de.fhkiel.temi.robogguide.real.Place
 import de.fhkiel.temi.robogguide.real.Text
@@ -70,7 +71,6 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
 
 
 
-        //TODO ABfrage über art und dann ausführung von createtour und  register
 
 
 
@@ -88,8 +88,15 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
         recyclerView.adapter = adapter
 
 
- */
+ */     val btnStop = findViewById<Button>(R.id.btnStop)
+        btnStop.visibility = Button.GONE
+        findViewById<Button>(R.id.btnStop).setOnClickListener(){
+            mRobot.cancelAllTtsRequests()
+            mRobot.stopMovement()
+        }
+
         findViewById<Button>(R.id.btnStart).setOnClickListener {
+            btnStop.visibility = Button.VISIBLE
 
             if(isShort && !isLong){isShort = true}
             if(!isShort && isLong){isShort = false}
@@ -131,12 +138,18 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
     fun doTourStop(){
         thread {
 
+
+
+
+
             //speak out every text for the location
             mTourManager.speakTexts(mTourManager.currentLocation.texts)
 
 
 
             sleep(500)
+
+
 
             //speak every location for each item
             mTourManager.currentLocation.items.forEach {
