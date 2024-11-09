@@ -126,12 +126,10 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     }
 
     fun doTourStop(){
+
         thread {
             Log.i("Arrived", "Bin angekommen")
 
-            runOnUiThread {
-                dummyText.text = tourManager.currentLocation.name
-            }
 
             //speak out every text for the location
             tourManager.speakTexts(tourManager.currentLocation.texts)

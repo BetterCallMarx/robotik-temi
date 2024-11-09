@@ -43,4 +43,5 @@ dependencies {
     implementation 'com.j256.ormlite:ormlite-core:5.1'
     implementation 'com.j256.ormlite:ormlite-android:5.1'
     implementation 'com.google.android.libraries.places:places:4.0.0'
+    implementation 'com.google.ar.sceneform:filament-android:1.17.1'
 }
