@@ -1,10 +1,12 @@
 package de.fhkiel.temi.robogguide
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import de.fhkiel.temi.robogguide.database.DataLoader
 
 class TourSelectionActivity : AppCompatActivity() {
 
@@ -31,38 +33,71 @@ class TourSelectionActivity : AppCompatActivity() {
             tvSelectedPlace.text = "Ausgewählter Ort: $selectedPlace"
         }
 
-        // Variablen zur Überprüfung, ob beide Optionen ausgewählt sind
-        var isDauerSelected = false
-        var isUmfangSelected = false
+        // Variablen für jede Auswahl
+        var isKurzSelected = false
+        var isLangSelected = false
+        var isIndividuellSelected = false
+
+        var isEinfachSelected = false
+        var isAusführlichSelected = false
 
         // Logik für die Sichtbarkeit des Bestätigungsbuttons
         val onSelectionChanged = {
-            // Button nur anzeigen, wenn sowohl Dauer als auch Umfang ausgewählt wurden
-            btnConfirmSelection.visibility = if (isDauerSelected && isUmfangSelected) {
+            // Button nur anzeigen, wenn mindestens eine Dauer und Umfang ausgewählt wurden
+            btnConfirmSelection.visibility = if ((isKurzSelected || isLangSelected || isIndividuellSelected) &&
+                (isEinfachSelected || isAusführlichSelected)) {
                 Button.VISIBLE
             } else {
                 Button.GONE
             }
         }
 
-        // Listener für Änderungen bei den RadioGroups
+        // Listener für Änderungen bei den RadioGroups für Dauer
         radioGroupDauer.setOnCheckedChangeListener { _, checkedId ->
-            isDauerSelected = checkedId != -1 // Überprüfe, ob eine Auswahl getroffen wurde
-            val selectedDauer = when (checkedId) {
-                R.id.rbKurz -> "Kurz"
-                R.id.rbLang -> "Lang"
-                R.id.rbIndividuell -> "Individuell" // Hier wird die Individuell-Option behandelt
+            // Zurücksetzen der Boolean-Werte für Dauer
+            isKurzSelected = false
+            isLangSelected = false
+            isIndividuellSelected = false
+
+            // Überprüfen, welche Auswahl getroffen wurde
+            when (checkedId) {
+                R.id.rbKurz -> isKurzSelected = true
+                R.id.rbLang -> isLangSelected = true
+                R.id.rbIndividuell -> isIndividuellSelected = true
+            }
+
+            // Update der TextView für Dauer
+            val selectedDauer = when {
+                isKurzSelected -> "Kurz"
+                isLangSelected -> "Lang"
+                isIndividuellSelected -> "Individuell"
                 else -> "Nicht ausgewählt"
             }
             tvDauerAuswahl.text = "Dauer der Führung: $selectedDauer"
             onSelectionChanged() // Prüfe nach jeder Auswahl, ob der Button angezeigt werden soll
         }
 
+
+       // var index: Int = DataLoader.places.indexOf(selectedPlace)
+
+       // DataLoader.places.get(index).locations
+
+        // Listener für Änderungen bei den RadioGroups für Umfang
         radioGroupUmfang.setOnCheckedChangeListener { _, checkedId ->
-            isUmfangSelected = checkedId != -1 // Überprüfe, ob eine Auswahl getroffen wurde
-            val selectedUmfang = when (checkedId) {
-                R.id.rbEinfach -> "Einfach"
-                R.id.rbAusführlich -> "Ausführlich"
+            // Zurücksetzen der Boolean-Werte für Umfang
+            isEinfachSelected = false
+            isAusführlichSelected = false
+
+            // Überprüfen, welche Auswahl getroffen wurde
+            when (checkedId) {
+                R.id.rbEinfach -> isEinfachSelected = true
+                R.id.rbAusführlich -> isAusführlichSelected = true
+            }
+
+            // Update der TextView für Umfang
+            val selectedUmfang = when {
+                isEinfachSelected -> "Einfach"
+                isAusführlichSelected -> "Ausführlich"
                 else -> "Nicht ausgewählt"
             }
             tvUmfangAuswahl.text = "Umfang der Erklärung: $selectedUmfang"
@@ -74,5 +109,16 @@ class TourSelectionActivity : AppCompatActivity() {
             // Weiterleitung zu einer anderen Aktivität, die die Tour startet oder bestätigt
             // Du kannst die Daten über ein Intent übergeben, um mit den Details fortzufahren
         }
+
+        btnConfirmSelection.setOnClickListener {
+            if (isIndividuellSelected==true) {
+                // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
+                val intent = Intent(this, LocationSelectionActivity::class.java)
+                intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
+                startActivity(intent)
+            }
+        }
+
+
     }
 }
