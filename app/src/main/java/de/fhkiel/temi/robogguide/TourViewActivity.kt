@@ -16,70 +16,86 @@ import kotlin.concurrent.thread
 
 class TourViewActivity(
     val mTourManager: TourManager
-): AppCompatActivity() {
+) : AppCompatActivity() {
 
     private lateinit var currentLocationName: TextView
     private lateinit var currentItemName: TextView
-
-
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tour_view)
 
-        val selectedLocation = intent.getStringArrayListExtra("selectedLocations")
+        // Hole die übergebenen Parameter aus dem Intent
+        val selectedLocation = intent.getStringArrayListExtra("selectedLocations") // Keine Typargumente nötig
         val selectedUmfang = intent.getStringExtra("selectedUmfang")
         val selectedPlace = intent.getStringExtra("selectedPlace")
-        Log.i("test", selectedLocation.toString())
+        Log.i("TourView", "Selected locations: $selectedLocation")
+        Log.i("TourView", "Selected umfang: $selectedUmfang")
 
         val isKurz = intent.getBooleanExtra("isKurz", false)
         val isLang = intent.getBooleanExtra("isLang", false)
         val isIndividuell = intent.getBooleanExtra("isIndividuell", false)
 
-
-        //TODO ABfrage über art und dann ausführung von createtour und  register
-
-        if(isKurz){
-
+        // Wenn "Individuell" ausgewählt wurde, die spezifische Tour vorbereiten
+        if (isIndividuell) {
+            // Hier kannst du die Logik für eine individuell anpassbare Tour hinzufügen
+            setupIndividualTour(selectedLocation, selectedUmfang)
         }
 
+        // Starte die Registrierung für Tourstopps
+        mTourManager.registerAsTourStopListener { doTourStop() }
 
-        mTourManager.registerAsTourStopListener{doTourStop()}
-
-
+        // Initialisiere Views
         val currentLocationName: TextView = findViewById(R.id.currentLocation)
         val currentItemName: TextView = findViewById(R.id.currentItem)
 
-
-        val mediaItems : List<Text> = DataLoader.places[2].locations[1].texts
+        // Beispiel für die Items für die Touransicht (kann dynamisch angepasst werden)
+        val mediaItems: List<Text> = DataLoader.places[2].locations[1].texts
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
         val adapter = MediaAdapter(this, mediaItems)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-
     }
 
-    fun doTourStop(){
-        thread {
+    // Methode zur Einrichtung einer individuellen Tour
+    private fun setupIndividualTour(selectedLocation: ArrayList<String>?, selectedUmfang: String?) {
+        // Hier kannst du mit den übergebenen Parametern die Tour individuell gestalten
+        // Beispielweise könntest du diese Daten nutzen, um Tourdetails zu laden
+        if (selectedLocation != null && selectedLocation.isNotEmpty()) {
+            Log.i("TourView", "Individuelle Tour für Orte: $selectedLocation")
+            // Weiterverarbeitung je nach Umfang (z.B. Umfang der Erklärung anpassen)
+            when (selectedUmfang) {
+                "Einfach" -> {
+                    // Beispiel: Einfache Tour mit weniger Erläuterungen
+                }
+                "Ausführlich" -> {
+                    // Beispiel: Ausführliche Tour mit mehr Erläuterungen
+                }
+                else -> {
+                    // Standard oder leere Auswahl
+                }
+            }
+        }
+    }
 
-            //speak out every text for the location
+    // Die Methode für den Tour-Stopp-Listener, die bei jeder neuen Station aufgerufen wird
+    fun doTourStop() {
+        thread {
+            // Alle Texte für den aktuellen Standort sprechen
             mTourManager.speakTexts(mTourManager.currentLocation.texts)
 
             runOnUiThread {
-               currentLocationName.text  = mTourManager.currentLocation.name
+                currentLocationName.text = mTourManager.currentLocation.name
             }
 
             sleep(500)
 
-            //speak every location for each item
+            // Alle Items des aktuellen Standorts sprechen
             mTourManager.currentLocation.items.forEach {
                 mTourManager.speakTexts(it.texts)
-
             }
-
-
 
             Log.i("Arrived", "Bin angekommen")
             val nextLocationIndex: Int = (mTourManager.locationsToVisit.indexOf(mTourManager.currentLocation)) + 1
@@ -98,9 +114,6 @@ class TourViewActivity(
 
                 mTourManager.currentLocation = nextLocation
             }
-
         }
-
     }
-
 }

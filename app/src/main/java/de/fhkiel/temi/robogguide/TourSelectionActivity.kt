@@ -99,13 +99,28 @@ class TourSelectionActivity : AppCompatActivity() {
         // Button, um die Auswahl zu bestätigen
         btnConfirmSelection.setOnClickListener {
             // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
-            if (isIndividuellSelected) {
-                val intent = Intent(this, LocationSelectionActivity::class.java)
-                intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
-                intent.putExtra("isEinfachSelected", isEinfachSelected) // Übergebe den Boolean-Wert für 'Einfach'
-                intent.putExtra("isAusführlichSelected", isAusführlichSelected) // Übergebe den Boolean-Wert für 'Ausführlich'
-                startActivity(intent)
+            val intent = if (isIndividuellSelected) {
+                Intent(this, LocationSelectionActivity::class.java)
+            } else {
+                Intent(this, TourViewActivity::class.java)
             }
+
+            // Übergebe den Ort und die Auswahloptionen (Einfach/Ausführlich)
+            intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
+            intent.putExtra("isEinfachSelected", isEinfachSelected) // Übergebe den Boolean-Wert für 'Einfach'
+            intent.putExtra("isAusführlichSelected", isAusführlichSelected) // Übergebe den Boolean-Wert für 'Ausführlich'
+
+            // Falls zu TourViewActivity weitergeleitet wird, übergebe auch Kurz/Lang Auswahl
+            if (!isIndividuellSelected) {
+                intent.putExtra("isKurzSelected", isKurzSelected) // Übergebe den Boolean-Wert für 'Kurz'
+                intent.putExtra("isLangSelected", isLangSelected) // Übergebe den Boolean-Wert für 'Lang'
+            }
+
+            // Starte die entsprechende Aktivität
+            startActivity(intent)
         }
+
+
     }
-}
+    }
+
