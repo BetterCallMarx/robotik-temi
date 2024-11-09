@@ -32,7 +32,7 @@
         <activity android:name="TourSelectionActivity" />
         <activity android:name=".LevelSelect"/>
         <activity android:name="TourViewActivity"/>
-
+<activity android:name=".LocationSelectionActivity"/>
         <!-- INCLUDE TEMI SDK -->
         <meta-data
             android:name="com.robotemi.sdk.metadata.SKILL"
