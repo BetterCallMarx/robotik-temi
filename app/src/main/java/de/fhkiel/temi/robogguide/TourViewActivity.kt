@@ -20,90 +20,71 @@ import de.fhkiel.temi.robogguide.real.Transfer
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
-class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
+class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener {
 
     private lateinit var mTourManager: TourManager
     private lateinit var mRobot: Robot
     private var isShort: Boolean = false
     var isLong: Boolean = false
-    var isInd : Boolean = false
+    var isInd: Boolean = false
     var isUndetailed: Boolean = false
     var isDetailed: Boolean = false
 
-
+    private lateinit var stopButton: Button
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tour_view)
 
         isShort = intent.getBooleanExtra("isShort", false)
-        isLong = intent.getBooleanExtra("isLong",false)
-        isInd = intent.getBooleanExtra("isIndividual",false)
-
-        isUndetailed = intent.getBooleanExtra("isUndetailed",false)
-        isDetailed = intent.getBooleanExtra("isDetailed",false)
+        isLong = intent.getBooleanExtra("isLong", false)
+        isInd = intent.getBooleanExtra("isIndividual", false)
+        isUndetailed = intent.getBooleanExtra("isUndetailed", false)
+        isDetailed = intent.getBooleanExtra("isDetailed", false)
 
         val selectedLocationsStr = intent.getStringArrayListExtra("selectedLocations")
-
-
         val selectedLocations = DataLoader.places[1].locations.filter { dl ->
             selectedLocationsStr?.contains(dl.name) == true
         }.toMutableList()
 
-
-
-        //TODO ABfrage über art und dann ausführung von createtour und  register
-
-
-
-        //mTourManager.createLongTour(selectedLocations, true)
-        //mTourManager.registerAsTourStopListener{doTourStop()}
-
-
         val currentLocationName: TextView = findViewById(R.id.currentLocation)
         val currentItemName: TextView = findViewById(R.id.currentItem)
 
-/*
-        val mediaItems : List<Text> = DataLoader.places[2].locations[1].texts
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        // Find the Start and Stop Buttons
+        val startButton: Button = findViewById(R.id.btnStart)
+        stopButton = findViewById(R.id.btnStop)
 
-        val adapter = MediaAdapter(this, mediaItems)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        startButton.setOnClickListener {
+            // Hide the start button when clicked
+            startButton.visibility = Button.GONE
 
+            // Show the stop button
+            stopButton.visibility = Button.VISIBLE
 
- */
-        findViewById<Button>(R.id.btnStart).setOnClickListener {
-            mTourManager = TourManager(mRobot,DataLoader.transfers)
+            // Start the tour
+            mTourManager = TourManager(mRobot, DataLoader.transfers)
             mTourManager.createShortTour(DataLoader.places[1].locations.toMutableList(), true)
             mTourManager.registerAsTourStopListener { doTourStop() }
-
-
         }
 
+        // Stop the tour when Stop button is clicked
+        stopButton.setOnClickListener {
+            stopTour()
+        }
     }
 
-
-
-    fun doTourStop(){
+    fun doTourStop() {
         thread {
-
-            //speak out every text for the location
+            // Speak out every text for the location
             mTourManager.speakTexts(mTourManager.currentLocation.texts)
-
-
 
             sleep(500)
 
-            //speak every location for each item
+            // Speak every location for each item
             mTourManager.currentLocation.items.forEach {
                 mTourManager.speakTexts(it.texts)
-
             }
-
-
 
             Log.i("Arrived", "Bin angekommen")
             val nextLocationIndex: Int = (mTourManager.locationsToVisit.indexOf(mTourManager.currentLocation)) + 1
@@ -122,8 +103,16 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
 
                 mTourManager.currentLocation = nextLocation
             }
-
         }
+    }
+
+    // Funktion zum Stoppen der Tour
+    private fun stopTour() {
+
+
+        // Stop-Button unsichtbar machen
+        stopButton.visibility = Button.GONE
+
 
     }
 
@@ -131,6 +120,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
         super.onStart()
         Robot.getInstance().addOnRobotReadyListener(this)
     }
+
     override fun onStop() {
         super.onStop()
         Robot.getInstance().removeOnRobotReadyListener(this)
@@ -141,14 +131,11 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
     }
 
     override fun onRobotReady(isReady: Boolean) {
-        if (isReady){
+        if (isReady) {
             mRobot = Robot.getInstance()
-            mRobot.hideTopBar()        // hide top action bar
-            // hide pull-down bar
+            mRobot.hideTopBar() // Hide top action bar
             val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
             Robot.getInstance().onStart(activityInfo)
         }
-
     }
-
 }
