@@ -83,6 +83,7 @@ class LocationSelectionActivity : AppCompatActivity() {
                 putExtra("isLang", isLang) // Boolean für "Lang"
                 putExtra("isIndividuell", isIndividuell) // Boolean für "Individuell"
             }
+
             startActivity(intent)
         }
     }

@@ -1,101 +1,109 @@
 package de.fhkiel.temi.robogguide
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.robotemi.sdk.Robot
+import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DataLoader
 import de.fhkiel.temi.robogguide.real.Location
+import de.fhkiel.temi.robogguide.real.Place
 import de.fhkiel.temi.robogguide.real.Text
 import de.fhkiel.temi.robogguide.real.Transfer
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
-class TourViewActivity(
-    val mTourManager: TourManager
-) : AppCompatActivity() {
+class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
 
-    private lateinit var currentLocationName: TextView
-    private lateinit var currentItemName: TextView
+    private lateinit var mTourManager: TourManager
+    private lateinit var mRobot: Robot
+    private var isShort: Boolean = false
+    var isLong: Boolean = false
+    var isInd : Boolean = false
+    var isUndetailed: Boolean = false
+    var isDetailed: Boolean = false
+
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tour_view)
 
-        // Hole die übergebenen Parameter aus dem Intent
-        val selectedLocation = intent.getStringArrayListExtra("selectedLocations") // Keine Typargumente nötig
-        val selectedUmfang = intent.getStringExtra("selectedUmfang")
-        val selectedPlace = intent.getStringExtra("selectedPlace")
-        Log.i("TourView", "Selected locations: $selectedLocation")
-        Log.i("TourView", "Selected umfang: $selectedUmfang")
+        isShort = intent.getBooleanExtra("isShort", false)
+        isLong = intent.getBooleanExtra("isLong",false)
+        isInd = intent.getBooleanExtra("isIndividual",false)
 
-        val isKurz = intent.getBooleanExtra("isKurz", false)
-        val isLang = intent.getBooleanExtra("isLang", false)
-        val isIndividuell = intent.getBooleanExtra("isIndividuell", false)
+        isUndetailed = intent.getBooleanExtra("isUndetailed",false)
+        isDetailed = intent.getBooleanExtra("isDetailed",false)
 
-        // Wenn "Individuell" ausgewählt wurde, die spezifische Tour vorbereiten
-        if (isIndividuell) {
-            // Hier kannst du die Logik für eine individuell anpassbare Tour hinzufügen
-            setupIndividualTour(selectedLocation, selectedUmfang)
-        }
+        val selectedLocationsStr = intent.getStringArrayListExtra("selectedLocations")
 
-        // Starte die Registrierung für Tourstopps
-        mTourManager.registerAsTourStopListener { doTourStop() }
 
-        // Initialisiere Views
+        val selectedLocations = DataLoader.places[1].locations.filter { dl ->
+            selectedLocationsStr?.contains(dl.name) == true
+        }.toMutableList()
+
+
+
+        //TODO ABfrage über art und dann ausführung von createtour und  register
+
+
+
+        //mTourManager.createLongTour(selectedLocations, true)
+        //mTourManager.registerAsTourStopListener{doTourStop()}
+
+
         val currentLocationName: TextView = findViewById(R.id.currentLocation)
         val currentItemName: TextView = findViewById(R.id.currentItem)
 
-        // Beispiel für die Items für die Touransicht (kann dynamisch angepasst werden)
-        val mediaItems: List<Text> = DataLoader.places[2].locations[1].texts
+/*
+        val mediaItems : List<Text> = DataLoader.places[2].locations[1].texts
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
         val adapter = MediaAdapter(this, mediaItems)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
-    }
 
-    // Methode zur Einrichtung einer individuellen Tour
-    private fun setupIndividualTour(selectedLocation: ArrayList<String>?, selectedUmfang: String?) {
-        // Hier kannst du mit den übergebenen Parametern die Tour individuell gestalten
-        // Beispielweise könntest du diese Daten nutzen, um Tourdetails zu laden
-        if (selectedLocation != null && selectedLocation.isNotEmpty()) {
-            Log.i("TourView", "Individuelle Tour für Orte: $selectedLocation")
-            // Weiterverarbeitung je nach Umfang (z.B. Umfang der Erklärung anpassen)
-            when (selectedUmfang) {
-                "Einfach" -> {
-                    // Beispiel: Einfache Tour mit weniger Erläuterungen
-                }
-                "Ausführlich" -> {
-                    // Beispiel: Ausführliche Tour mit mehr Erläuterungen
-                }
-                else -> {
-                    // Standard oder leere Auswahl
-                }
-            }
+
+ */
+        findViewById<Button>(R.id.btnStart).setOnClickListener {
+            mTourManager = TourManager(mRobot,DataLoader.transfers)
+            mTourManager.createShortTour(DataLoader.places[1].locations.toMutableList(), true)
+            mTourManager.registerAsTourStopListener { doTourStop() }
+
+
         }
+
     }
 
-    // Die Methode für den Tour-Stopp-Listener, die bei jeder neuen Station aufgerufen wird
-    fun doTourStop() {
+
+
+    fun doTourStop(){
         thread {
-            // Alle Texte für den aktuellen Standort sprechen
+
+            //speak out every text for the location
             mTourManager.speakTexts(mTourManager.currentLocation.texts)
 
-            runOnUiThread {
-                currentLocationName.text = mTourManager.currentLocation.name
-            }
+
 
             sleep(500)
 
-            // Alle Items des aktuellen Standorts sprechen
+            //speak every location for each item
             mTourManager.currentLocation.items.forEach {
                 mTourManager.speakTexts(it.texts)
+
             }
+
+
 
             Log.i("Arrived", "Bin angekommen")
             val nextLocationIndex: Int = (mTourManager.locationsToVisit.indexOf(mTourManager.currentLocation)) + 1
@@ -114,6 +122,33 @@ class TourViewActivity(
 
                 mTourManager.currentLocation = nextLocation
             }
+
         }
+
     }
+
+    override fun onStart() {
+        super.onStart()
+        Robot.getInstance().addOnRobotReadyListener(this)
+    }
+    override fun onStop() {
+        super.onStop()
+        Robot.getInstance().removeOnRobotReadyListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onRobotReady(isReady: Boolean) {
+        if (isReady){
+            mRobot = Robot.getInstance()
+            mRobot.hideTopBar()        // hide top action bar
+            // hide pull-down bar
+            val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
+            Robot.getInstance().onStart(activityInfo)
+        }
+
+    }
+
 }

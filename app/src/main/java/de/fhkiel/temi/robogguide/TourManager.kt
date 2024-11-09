@@ -7,13 +7,14 @@ import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import de.fhkiel.temi.robogguide.real.Location
 import de.fhkiel.temi.robogguide.real.Text
 import de.fhkiel.temi.robogguide.real.Transfer
+import java.io.Serializable
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
 class TourManager(
     val mRobot: Robot,
     val inputTransfers: List<Transfer>
-) : OnGoToLocationStatusChangedListener, Robot.TtsListener {
+) : OnGoToLocationStatusChangedListener, Robot.TtsListener, Serializable {
     lateinit var locationsToVisit: MutableList<Location>
     lateinit var currentLocation: Location
     var detailedFlag: Boolean = false
@@ -39,6 +40,8 @@ class TourManager(
         }
 
     }
+
+
 
 
 

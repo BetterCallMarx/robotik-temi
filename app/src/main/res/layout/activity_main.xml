@@ -20,8 +20,8 @@
 
     <Button
         android:id="@+id/btnExitApp"
-        android:layout_width="95dp"
-        android:layout_height="76dp"
+        android:layout_width="84dp"
+        android:layout_height="0dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:drawableEnd="@drawable/baseline_exit_to_app_24"
@@ -34,7 +34,7 @@
         android:id="@+id/Tour"
         android:layout_width="166dp"
         android:layout_height="94dp"
-        android:layout_marginTop="560dp"
+        android:layout_marginTop="476dp"
         android:layout_marginEnd="536dp"
         android:drawablePadding="@dimen/btnIconPadding"
         android:text="Starte eine Tour"
@@ -53,6 +53,15 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/Tour"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/shortTour"
+        android:layout_width="123dp"
+        android:layout_height="63dp"
+        android:text="Kurze Tour"
+        app:layout_constraintEnd_toStartOf="@+id/welcomeText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

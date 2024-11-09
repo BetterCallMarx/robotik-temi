@@ -35,4 +35,12 @@
         app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        tools:layout_editor_absoluteX="1117dp"
+        tools:layout_editor_absoluteY="31dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

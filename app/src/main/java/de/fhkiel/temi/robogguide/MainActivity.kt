@@ -1,6 +1,7 @@
 package de.fhkiel.temi.robogguide
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     private lateinit var dummyText: TextView
 
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
 
 
-       //Log.i("Places" ,"${DataLoader.places}")
+        //Log.i("Places" ,"${DataLoader.places}")
         //Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
         //Log.i("Transfers" ,"${DataLoader.transfers}")
 
@@ -55,15 +57,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
             startActivity(intent)
         }
 
-        //dummyText = findViewById<TextView>(R.id.dummyText)
 
-        // let robot speak on button click
-
-        /*
-        findViewById<Button>(R.id.btnCancelSpeak).setOnClickListener {
-            mRobot?.cancelAllTtsRequests()
-        }
-        */
 
         findViewById<Button>(R.id.btnGotoHomeBase).setOnClickListener {
             gotoHomeBase()
@@ -97,6 +91,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
             // hide pull-down bar
             val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
             Robot.getInstance().onStart(activityInfo)
+            tourManager = TourManager(mRobot,DataLoader.transfers)
         }
     }
 
@@ -120,7 +115,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     private fun gotoHomeBase(){
 
         var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
-        tourManager = TourManager(mRobot,DataLoader.transfers)
+       // tourManager = TourManager(mRobot,DataLoader.transfers)
         tourManager.createLongTour(DataLoader.places[1].locations.toMutableList(),detailed = true)
         tourManager.registerAsTourStopListener{doTourStop()}
     }
