@@ -19,14 +19,12 @@ class LocationSelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.location_selection)
 
-        // Hole den ausgewählten Ort aus dem Intent
+        // Hole den ausgewählten Ort und Umfang aus dem Intent
         val selectedPlace = intent.getStringExtra("selectedPlace")
+        val selectedDauer = intent.getStringExtra("selectedDauer") // Dies kann "Kurz", "Lang", "Individuell" sein
         val tvLocationHeader = findViewById<TextView>(R.id.tvLocationHeader)
         val locationsContainer = findViewById<LinearLayout>(R.id.locationsContainer)
         val btnConfirmLocation = findViewById<Button>(R.id.btnConfirmLocation)
-
-        // Umfang der Erklärung (beispielsweise "Kurz", "Individuell", etc.)
-        val selectedUmfang = "Kurz"  // Hier kannst du die Auswahl dynamisch setzen, wenn du ein entsprechendes UI-Element hast
 
         // Überprüfe, ob der Ort gültig ist
         if (selectedPlace != null) {
@@ -69,6 +67,11 @@ class LocationSelectionActivity : AppCompatActivity() {
             }
         }
 
+        // Umwandlung des Umfangs (Dauer) in Boolean-Werte
+        val isKurz = selectedDauer == "Kurz"
+        val isLang = selectedDauer == "Lang"
+        val isIndividuell = selectedDauer == "Individuell"
+
         // Listener für den Bestätigungsbutton
         btnConfirmLocation.setOnClickListener {
             // Weiterleiten der ausgewählten Locations und des Umfangs an TourViewActivity
@@ -76,10 +79,11 @@ class LocationSelectionActivity : AppCompatActivity() {
                 // Umwandeln des Sets in eine ArrayList
                 putExtra("selectedLocations", ArrayList(selectedLocations)) // Set in ArrayList umwandeln
                 putExtra("selectedPlace", selectedPlace) // Ort
-                putExtra("selectedUmfang", selectedUmfang) // Umfang der Erklärung
+                putExtra("isKurz", isKurz) // Boolean für "Kurz"
+                putExtra("isLang", isLang) // Boolean für "Lang"
+                putExtra("isIndividuell", isIndividuell) // Boolean für "Individuell"
             }
             startActivity(intent)
         }
     }
 }
-

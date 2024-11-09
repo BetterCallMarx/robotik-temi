@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import de.fhkiel.temi.robogguide.database.DataLoader
 
 class TourSelectionActivity : AppCompatActivity() {
 
@@ -36,7 +35,6 @@ class TourSelectionActivity : AppCompatActivity() {
         var isKurzSelected = false
         var isLangSelected = false
         var isIndividuellSelected = false
-
         var isEinfachSelected = false
         var isAusführlichSelected = false
 
@@ -100,12 +98,12 @@ class TourSelectionActivity : AppCompatActivity() {
 
         // Button, um die Auswahl zu bestätigen
         btnConfirmSelection.setOnClickListener {
-            // Überprüfen, ob 'Individuell' ausgewählt wurde
+            // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
             if (isIndividuellSelected) {
-                // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
                 val intent = Intent(this, LocationSelectionActivity::class.java)
                 intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
-                intent.putExtra("selectedUmfang", if (isEinfachSelected) "Einfach" else if (isAusführlichSelected) "Ausführlich" else "Nicht ausgewählt") // Übergebe den Umfang
+                intent.putExtra("isEinfachSelected", isEinfachSelected) // Übergebe den Boolean-Wert für 'Einfach'
+                intent.putExtra("isAusführlichSelected", isAusführlichSelected) // Übergebe den Boolean-Wert für 'Ausführlich'
                 startActivity(intent)
             }
         }
