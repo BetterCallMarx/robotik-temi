@@ -121,9 +121,12 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
         var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
         tourManager = TourManager(mRobot,DataLoader.transfers)
+        tourManager.createLongTour(DataLoader.places[1].locations.toMutableList(),detailed = true)
         tourManager.registerAsTourStopListener{doTourStop()}
-        tourManager.createShortTour(DataLoader.places[1].locations.toMutableList(),detailed = false)
     }
+
+
+
 
     fun doTourStop(){
 

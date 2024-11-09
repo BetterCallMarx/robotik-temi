@@ -16,7 +16,7 @@ class TourManager(
 ) : OnGoToLocationStatusChangedListener, Robot.TtsListener {
     lateinit var locationsToVisit: MutableList<Location>
     lateinit var currentLocation: Location
-    var detailedFlag: Boolean = true
+    var detailedFlag: Boolean = false
     var speaking: Boolean = false
 
     init {
@@ -40,7 +40,9 @@ class TourManager(
 
     }
 
-    private fun createLongTour(listLocations: MutableList<Location>, detailed: Boolean) {
+
+
+    fun createLongTour(listLocations: MutableList<Location>, detailed: Boolean) {
         //filter by important locations
         detailedFlag = detailed
         locationsToVisit = listLocations
