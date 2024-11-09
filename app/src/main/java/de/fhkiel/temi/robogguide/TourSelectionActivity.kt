@@ -111,12 +111,14 @@ class TourSelectionActivity : AppCompatActivity() {
         }
 
         btnConfirmSelection.setOnClickListener {
-            if (isIndividuellSelected==true) {
-                // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
-                val intent = Intent(this, LocationSelectionActivity::class.java)
-                intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
-                startActivity(intent)
-            }
+                if (isIndividuellSelected==true) {
+
+                    // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
+                    val intent = Intent(this, LocationSelectionActivity::class.java)
+                    intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
+                    startActivity(intent)
+                }
+
         }
 
 

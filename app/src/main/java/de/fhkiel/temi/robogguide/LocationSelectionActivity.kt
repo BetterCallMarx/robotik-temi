@@ -16,6 +16,7 @@ class LocationSelectionActivity : AppCompatActivity() {
     private val selectedLocations = mutableSetOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.location_selection)
 
@@ -61,16 +62,6 @@ class LocationSelectionActivity : AppCompatActivity() {
                         locationsContainer.addView(locationButton)
                     }
 
-                    // Aktion bei Bestätigung der Auswahl
-                    btnConfirmLocation.setOnClickListener {
-                        // Erstelle Intent für die nächste Aktivität
-                        //val intent = Intent(this@LocationSelectionActivity, NextActivity::class.java).apply {
-                            // Übergebe die Liste der ausgewählten Locations
-                            //putStringArrayListExtra("selectedLocations", ArrayList(selectedLocations))
-                        }
-
-                        // Starte die nächste Aktivität
-                        startActivity(intent)
 
                         Toast.makeText(
                             this@LocationSelectionActivity,
