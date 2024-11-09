@@ -16,7 +16,6 @@ class LocationSelectionActivity : AppCompatActivity() {
     private val selectedLocations = mutableSetOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.location_selection)
 
@@ -25,6 +24,9 @@ class LocationSelectionActivity : AppCompatActivity() {
         val tvLocationHeader = findViewById<TextView>(R.id.tvLocationHeader)
         val locationsContainer = findViewById<LinearLayout>(R.id.locationsContainer)
         val btnConfirmLocation = findViewById<Button>(R.id.btnConfirmLocation)
+
+        // Umfang der Erklärung (beispielsweise "Kurz", "Individuell", etc.)
+        val selectedUmfang = "Kurz"  // Hier kannst du die Auswahl dynamisch setzen, wenn du ein entsprechendes UI-Element hast
 
         // Überprüfe, ob der Ort gültig ist
         if (selectedPlace != null) {
@@ -61,18 +63,23 @@ class LocationSelectionActivity : AppCompatActivity() {
                         }
                         locationsContainer.addView(locationButton)
                     }
-
-
-                        Toast.makeText(
-                            this@LocationSelectionActivity,
-                            "Ausgewählte Ziele: ${selectedLocations.joinToString(", ")}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
                 } else {
                     Toast.makeText(this, "Keine Ziele für diesen Ort verfügbar.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
+        // Listener für den Bestätigungsbutton
+        btnConfirmLocation.setOnClickListener {
+            // Weiterleiten der ausgewählten Locations und des Umfangs an TourViewActivity
+            val intent = Intent(this, TourViewActivity::class.java).apply {
+                // Umwandeln des Sets in eine ArrayList
+                putExtra("selectedLocations", ArrayList(selectedLocations)) // Set in ArrayList umwandeln
+                putExtra("selectedPlace", selectedPlace) // Ort
+                putExtra("selectedUmfang", selectedUmfang) // Umfang der Erklärung
+            }
+            startActivity(intent)
+        }
     }
+}
 

@@ -27,7 +27,6 @@ class TourSelectionActivity : AppCompatActivity() {
         // Hole den ausgewählten Ort aus dem Intent
         val selectedPlace = intent.getStringExtra("selectedPlace")
 
-
         // Wenn der Ort vorhanden ist, setze ihn in die TextView
         if (selectedPlace != null) {
             tvSelectedPlace.text = "Ausgewählter Ort: $selectedPlace"
@@ -77,11 +76,6 @@ class TourSelectionActivity : AppCompatActivity() {
             onSelectionChanged() // Prüfe nach jeder Auswahl, ob der Button angezeigt werden soll
         }
 
-
-       // var index: Int = DataLoader.places.indexOf(selectedPlace)
-
-       // DataLoader.places.get(index).locations
-
         // Listener für Änderungen bei den RadioGroups für Umfang
         radioGroupUmfang.setOnCheckedChangeListener { _, checkedId ->
             // Zurücksetzen der Boolean-Werte für Umfang
@@ -106,21 +100,14 @@ class TourSelectionActivity : AppCompatActivity() {
 
         // Button, um die Auswahl zu bestätigen
         btnConfirmSelection.setOnClickListener {
-            // Weiterleitung zu einer anderen Aktivität, die die Tour startet oder bestätigt
-            // Du kannst die Daten über ein Intent übergeben, um mit den Details fortzufahren
+            // Überprüfen, ob 'Individuell' ausgewählt wurde
+            if (isIndividuellSelected) {
+                // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
+                val intent = Intent(this, LocationSelectionActivity::class.java)
+                intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
+                intent.putExtra("selectedUmfang", if (isEinfachSelected) "Einfach" else if (isAusführlichSelected) "Ausführlich" else "Nicht ausgewählt") // Übergebe den Umfang
+                startActivity(intent)
+            }
         }
-
-        btnConfirmSelection.setOnClickListener {
-                if (isIndividuellSelected==true) {
-
-                    // Weiter zu LocationSelectionActivity, wenn Individuell ausgewählt wurde
-                    val intent = Intent(this, LocationSelectionActivity::class.java)
-                    intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
-                    startActivity(intent)
-                }
-
-        }
-
-
     }
 }
