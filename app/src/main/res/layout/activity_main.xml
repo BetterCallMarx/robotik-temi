@@ -7,48 +7,10 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btnSpeakHelloWorld"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/btnHeight"
-        android:drawableStart="@drawable/baseline_chat_24"
-        android:drawablePadding="@dimen/btnIconPadding"
-        android:text="@string/btnSpeakHelloWorld"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnSpeakLocations"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/btnHeight"
-        android:drawableStart="@drawable/baseline_not_listed_location_24"
-        android:drawablePadding="@dimen/btnIconPadding"
-        android:text="@string/btnSpeakLocations"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSpeakHelloWorld"
-        app:layout_constraintVertical_bias="0.387" />
-
-    <Button
-        android:id="@+id/btnCancelSpeak"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/btnHeight"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:drawableStart="@drawable/baseline_cancel_24"
-        android:drawablePadding="@dimen/btnIconPadding"
-        android:text="@string/btnCancelSpeak"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
         android:id="@+id/btnGotoHomeBase"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/btnHeight"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="72dp"
         android:layout_marginBottom="16dp"
         android:drawableStart="@drawable/baseline_home_24"
         android:drawablePadding="@dimen/btnIconPadding"
@@ -58,10 +20,10 @@
 
     <Button
         android:id="@+id/btnExitApp"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/btnHeight"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="95dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:drawableEnd="@drawable/baseline_exit_to_app_24"
         android:drawablePadding="@dimen/btnIconPadding"
         android:text="@string/btnExit"
@@ -70,23 +32,28 @@
 
     <Button
         android:id="@+id/Tour"
-        android:layout_width="120dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="1100dp"
+        android:layout_width="166dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="560dp"
+        android:layout_marginEnd="536dp"
         android:drawablePadding="@dimen/btnIconPadding"
-        android:text="Tour"
+        android:text="Starte eine Tour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/dummyText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/btnSpeakHelloWorld"
-        app:layout_constraintEnd_toStartOf="@+id/btnExitApp"
-        app:layout_constraintStart_toEndOf="@+id/Tour"
+        android:id="@+id/welcomeText"
+        android:layout_width="603dp"
+        android:layout_height="190dp"
+        android:fontFamily="monospace"
+        android:text="Willkommen Im Computermusem!"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Tour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

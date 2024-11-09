@@ -31,6 +31,7 @@
 
         <activity android:name="TourSelectionActivity" />
         <activity android:name=".LevelSelect"/>
+        <activity android:name="TourViewActivity"/>
 
         <!-- INCLUDE TEMI SDK -->
         <meta-data

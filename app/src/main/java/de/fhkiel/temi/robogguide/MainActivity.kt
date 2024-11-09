@@ -34,9 +34,7 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
 
     private lateinit var mRobot: Robot
-    private lateinit var mTourHelper : TourHelper
     private lateinit var tourManager: TourManager
-
     private lateinit var dummyText: TextView
 
 
@@ -46,36 +44,29 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
         setContentView(R.layout.activity_main)
         DataLoader.initData(this)
 
-        dummyText = findViewById<TextView>(R.id.dummyText)
 
-        Log.i("Places" ,"${DataLoader.places}")
-        Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
-        Log.i("Transfers" ,"${DataLoader.transfers}")
+
+       //Log.i("Places" ,"${DataLoader.places}")
+        //Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
+        //Log.i("Transfers" ,"${DataLoader.transfers}")
 
         findViewById<Button>(R.id.Tour).setOnClickListener {
             val intent = Intent(this, LevelSelect::class.java)
             startActivity(intent)
         }
 
-
+        //dummyText = findViewById<TextView>(R.id.dummyText)
 
         // let robot speak on button click
-        findViewById<Button>(R.id.btnSpeakHelloWorld).setOnClickListener {
-            speakHelloWorld("Hallo")
-        }
 
-
-        findViewById<Button>(R.id.btnSpeakLocations).setOnClickListener {
-            speakLocations()
-        }
-
+        /*
         findViewById<Button>(R.id.btnCancelSpeak).setOnClickListener {
             mRobot?.cancelAllTtsRequests()
         }
+        */
 
         findViewById<Button>(R.id.btnGotoHomeBase).setOnClickListener {
             gotoHomeBase()
-           // shortTour()
         }
 
         findViewById<Button>(R.id.btnExitApp).setOnClickListener {
@@ -97,14 +88,10 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        //database.closeDatabase()
-        //ormhelper.close()
     }
 
     override fun onRobotReady(isReady: Boolean) {
         if (isReady){
-
-            Log.i("test", "reADY")
             mRobot = Robot.getInstance()
             mRobot.hideTopBar()        // hide top action bar
             // hide pull-down bar
@@ -131,11 +118,11 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
     }
 
     private fun gotoHomeBase(){
+
         var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
         tourManager = TourManager(mRobot,DataLoader.transfers)
         tourManager.registerAsTourStopListener{doTourStop()}
         tourManager.createShortTour(DataLoader.places[1].locations.toMutableList(),detailed = false)
-        //runOnUiThread
     }
 
     fun doTourStop(){

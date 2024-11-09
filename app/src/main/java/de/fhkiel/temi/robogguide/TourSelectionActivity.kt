@@ -25,6 +25,7 @@ class TourSelectionActivity : AppCompatActivity() {
         // Hole den ausgewählten Ort aus dem Intent
         val selectedPlace = intent.getStringExtra("selectedPlace")
 
+
         // Wenn der Ort vorhanden ist, setze ihn in die TextView
         if (selectedPlace != null) {
             tvSelectedPlace.text = "Ausgewählter Ort: $selectedPlace"
