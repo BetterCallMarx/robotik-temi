@@ -9,6 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 
 class TourSelectionActivity : AppCompatActivity() {
 
+    var isKurzSelected = false
+    var isLangSelected = false
+    var isIndividuellSelected = false
+    var isEinfachSelected = false
+    var isAusführlichSelected = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tour_options)
@@ -32,11 +38,7 @@ class TourSelectionActivity : AppCompatActivity() {
         }
 
         // Variablen für jede Auswahl
-        var isKurzSelected = false
-        var isLangSelected = false
-        var isIndividuellSelected = false
-        var isEinfachSelected = false
-        var isAusführlichSelected = false
+
 
         // Logik für die Sichtbarkeit des Bestätigungsbuttons
         val onSelectionChanged = {
@@ -104,8 +106,24 @@ class TourSelectionActivity : AppCompatActivity() {
                 intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
                 intent.putExtra("isEinfachSelected", isEinfachSelected) // Übergebe den Boolean-Wert für 'Einfach'
                 intent.putExtra("isAusführlichSelected", isAusführlichSelected) // Übergebe den Boolean-Wert für 'Ausführlich'
+                intent.putExtra("isIndividuell", isIndividuellSelected)
                 startActivity(intent)
             }
+            if(isKurzSelected || isLangSelected){
+                val intent = Intent(this, TourViewActivity::class.java)
+
+                intent.putExtra("selectedPlace", selectedPlace) // Übergebe den Ort
+                intent.putExtra("isEinfachSelected", isEinfachSelected) // Übergebe den Boolean-Wert für 'Einfach'
+                intent.putExtra("isAusführlichSelected", isAusführlichSelected) // Übergebe den Boolean-Wert für 'Ausführlich
+                intent.putExtra("isLang", isLangSelected)
+                intent.putExtra("isKurzSelected", isKurzSelected)
+
+                startActivity(intent)
+
+
+
+            }
+
         }
     }
 }

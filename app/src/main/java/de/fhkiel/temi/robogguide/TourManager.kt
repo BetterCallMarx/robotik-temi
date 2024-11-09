@@ -57,6 +57,17 @@ class TourManager(
 
     }
 
+    fun createIndTour(listLocations: MutableList<Location>, detailed: Boolean){
+        detailedFlag = detailed
+        locationsToVisit = listLocations
+
+        if (locationsToVisit.isNotEmpty()) {
+            currentLocation = locationsToVisit[0]
+            mRobot.goTo(currentLocation.name)
+        }
+
+    }
+
     private fun speak(text: String) {
 
         speaking = true

@@ -70,7 +70,7 @@ class LocationSelectionActivity : AppCompatActivity() {
         // Umwandlung des Umfangs (Dauer) in Boolean-Werte
         val isKurz = selectedDauer == "Kurz"
         val isLang = selectedDauer == "Lang"
-        val isIndividuell = selectedDauer == "Individuell"
+        var isIndividuell = selectedDauer == "Individuell"
 
         // Listener für den Bestätigungsbutton
         btnConfirmLocation.setOnClickListener {
@@ -81,6 +81,7 @@ class LocationSelectionActivity : AppCompatActivity() {
                 putExtra("selectedPlace", selectedPlace) // Ort
                 putExtra("isKurz", isKurz) // Boolean für "Kurz"
                 putExtra("isLang", isLang) // Boolean für "Lang"
+                isIndividuell = true
                 putExtra("isIndividuell", isIndividuell) // Boolean für "Individuell"
             }
 
