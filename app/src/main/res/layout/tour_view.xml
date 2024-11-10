@@ -58,6 +58,14 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="16dp"/>
 
+    <ProgressBar
+        android:id="@+id/tourProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="218dp"
+        android:layout_height="28dp"
+        app:layout_constraintEnd_toStartOf="@+id/currentLocation"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="59dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

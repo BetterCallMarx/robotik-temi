@@ -35,6 +35,8 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
     var selectedPlace: String = ""
     var indexP: Int = 0
     private lateinit var selectedLocations : MutableList<Location>
+    private lateinit var locationsText: TextView
+    private lateinit var itemsText: TextView
 
 
 
@@ -42,6 +44,9 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tour_view)
+
+        locationsText = findViewById<TextView>(R.id.currentLocation)
+        itemsText = findViewById<TextView>(R.id.currentItem)
 
         selectedPlace = intent.getStringExtra("selectedPlace").toString()
 
@@ -140,8 +145,9 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
         thread {
 
 
-
-
+            runOnUiThread {
+                locationsText.text = mTourManager.currentLocation.name
+            }
 
             //speak out every text for the location
             mTourManager.speakTexts(mTourManager.currentLocation.texts)
@@ -154,6 +160,9 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
             //speak every location for each item
             mTourManager.currentLocation.items.forEach {
+                runOnUiThread{
+                    itemsText.text = it.name
+                }
                 mTourManager.speakTexts(it.texts)
 
             }
