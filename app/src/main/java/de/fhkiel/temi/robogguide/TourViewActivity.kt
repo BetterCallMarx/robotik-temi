@@ -109,8 +109,6 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
                 isShort = false
                 Log.i("test3", isDetailed.toString())
                 Log.i("test4", isShort.toString())
-
-
             }
 
 
