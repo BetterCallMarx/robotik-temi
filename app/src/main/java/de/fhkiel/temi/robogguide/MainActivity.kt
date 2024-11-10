@@ -114,10 +114,14 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
     private fun gotoHomeBase(){
 
+        tourManager.mRobot.goTo("home base")
+        /*
         var list: MutableList<Location> = DataLoader.places[0].locations.toMutableList()
        // tourManager = TourManager(mRobot,DataLoader.transfers)
         tourManager.createLongTour(DataLoader.places[1].locations.toMutableList(),detailed = true)
         tourManager.registerAsTourStopListener{doTourStop()}
+
+         */
     }
 
 

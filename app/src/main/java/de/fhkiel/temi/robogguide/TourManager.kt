@@ -68,7 +68,7 @@ class TourManager(
 
     }
 
-    private fun speak(text: String) {
+    fun speak(text: String) {
 
         speaking = true
         val ttsRequest: TtsRequest = TtsRequest.create(speech = text, false)

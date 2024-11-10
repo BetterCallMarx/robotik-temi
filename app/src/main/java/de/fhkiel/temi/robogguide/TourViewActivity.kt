@@ -1,6 +1,7 @@
 package de.fhkiel.temi.robogguide
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.robotemi.sdk.Robot
+import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
 import de.fhkiel.temi.robogguide.database.DataLoader
 import de.fhkiel.temi.robogguide.real.Item
@@ -21,7 +23,7 @@ import de.fhkiel.temi.robogguide.real.Transfer
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
-class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
+class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
 
     private lateinit var mTourManager: TourManager
     private lateinit var mRobot: Robot
@@ -200,7 +202,26 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener {
             // hide pull-down bar
             val activityInfo: ActivityInfo = packageManager.getActivityInfo(componentName, PackageManager.GET_META_DATA)
             Robot.getInstance().onStart(activityInfo)
+            mRobot.addOnGoToLocationStatusChangedListener(this)
         }
+
+    }
+
+    override fun onGoToLocationStatusChanged(
+        location: String,
+        status: String,
+        descriptionId: Int,
+        description: String
+    ) {
+
+        if(status == OnGoToLocationStatusChangedListener.ABORT)
+        {
+            mTourManager.speak("Tut mir Leid, es ist wohl ein Fehler aufgetreten, bitte starte die Tour neu")
+            sleep(500)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
 
     }
 
