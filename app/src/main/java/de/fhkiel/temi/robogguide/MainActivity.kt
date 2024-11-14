@@ -48,9 +48,6 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
 
 
 
-        //Log.i("Places" ,"${DataLoader.places}")
-        //Log.i("Places" ,"${DataLoader.places.filter { it.name == "C12"  }}")
-        //Log.i("Transfers" ,"${DataLoader.transfers}")
 
         findViewById<Button>(R.id.Tour).setOnClickListener {
             val intent = Intent(this, LevelSelect::class.java)

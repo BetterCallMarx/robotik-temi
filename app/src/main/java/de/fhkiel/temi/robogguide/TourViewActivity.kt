@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ import de.fhkiel.temi.robogguide.real.Text
 import de.fhkiel.temi.robogguide.real.Transfer
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
+import com.squareup.picasso.Picasso;
 
 class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocationStatusChangedListener {
 
@@ -37,6 +39,8 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
     private lateinit var selectedLocations : MutableList<Location>
     private lateinit var locationsText: TextView
     private lateinit var itemsText: TextView
+    private lateinit var imageItem: ImageView
+    var stoppedFlag: Boolean = false
 
 
 
@@ -47,6 +51,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
         locationsText = findViewById<TextView>(R.id.currentLocation)
         itemsText = findViewById<TextView>(R.id.currentItem)
+        imageItem = findViewById<ImageView>(R.id.itemImage)
 
         selectedPlace = intent.getStringExtra("selectedPlace").toString()
 
@@ -90,9 +95,6 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
         val mediaItems : List<Text> = DataLoader.places[2].locations[1].texts
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
-        val adapter = MediaAdapter(this, mediaItems)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
 
 
  */     val btnStop = findViewById<Button>(R.id.btnStop)
@@ -100,6 +102,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
         findViewById<Button>(R.id.btnStop).setOnClickListener(){
             mRobot.cancelAllTtsRequests()
             mRobot.stopMovement()
+            stoppedFlag = true
         }
 
         findViewById<Button>(R.id.btnStart).setOnClickListener {
@@ -134,6 +137,11 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
             }
 
+            if(stoppedFlag){
+                //if the Tour is stopped than go to the last visited location
+                mTourManager.mRobot.goTo(mTourManager.currentLocation.name)
+            }
+
 
         }
 
@@ -159,13 +167,17 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
 
             //speak every location for each item
-            mTourManager.currentLocation.items.forEach {
+            mTourManager.currentLocation.items.forEachIndexed { index, it ->
                 runOnUiThread{
                     itemsText.text = it.name
+                    if(!it.texts[index].mediaUrls[index].contains("youtube")) {
+                        Picasso.get().load(it.texts[index].mediaUrls[index]).into(imageItem)
+                    }
                 }
                 mTourManager.speakTexts(it.texts)
 
             }
+
 
 
 
@@ -185,6 +197,9 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
                 transferText.forEach { t -> mTourManager.speakTextsTransfer(t.texts) }
 
                 mTourManager.currentLocation = nextLocation
+            }else if(nextLocationIndex == mTourManager.locationsToVisit.size){
+                val intent = Intent(this, FeedbackActivity::class.java)
+                startActivity(intent)
             }
 
         }
@@ -226,7 +241,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
         if(status == OnGoToLocationStatusChangedListener.ABORT)
         {
             mTourManager.speak("Tut mir Leid, es ist wohl ein Fehler aufgetreten, bitte starte die Tour neu")
-            sleep(500)
+            sleep(1000)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
