@@ -1,10 +1,12 @@
 package de.fhkiel.temi.robogguide
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -54,6 +56,9 @@ class FeedbackActivity : AppCompatActivity() {
 
         // Speichere Feedback in einer Textdatei
         saveFeedbackToFile(feedback)
+        createAndSaveTxtFile("de.fhkiel.temi.robogguide","feedbacks","test.txt","test")
+        intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun saveFeedbackToFile(feedback: String) {
@@ -63,5 +68,27 @@ class FeedbackActivity : AppCompatActivity() {
 
         val file = File(filesDir, fileName)
         file.appendText("Feedback: $feedback\n")
+    }
+
+    fun createAndSaveTxtFile(baseDir: String, subDir: String, fileName: String, content: String): Boolean {
+        try {
+            // Create the subdirectory if it doesn't exist
+            val directory = File(baseDir, subDir)
+            if (!directory.exists()) {
+                if (!directory.mkdirs()) {
+                    println("Failed to create directory: $directory")
+                    return false
+                }
+            }
+
+            // Create the file within the subdirectory
+            val file = File(directory, fileName)
+            file.writeText(content) // Write content to the file
+            println("File created successfully at: ${file.absolutePath}")
+            return true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return false
+        }
     }
 }

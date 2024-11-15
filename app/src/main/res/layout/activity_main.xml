@@ -56,13 +56,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/shortTour"
-        android:layout_width="123dp"
-        android:layout_height="63dp"
-        android:text="Kurze Tour"
-        app:layout_constraintEnd_toStartOf="@+id/welcomeText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

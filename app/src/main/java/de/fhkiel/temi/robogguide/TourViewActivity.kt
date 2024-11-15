@@ -5,9 +5,12 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.robotemi.sdk.Robot
 import com.robotemi.sdk.listeners.OnGoToLocationStatusChangedListener
 import com.robotemi.sdk.listeners.OnRobotReadyListener
+import com.squareup.okhttp.internal.framed.FrameReader
 import de.fhkiel.temi.robogguide.database.DataLoader
 import de.fhkiel.temi.robogguide.real.Item
 import de.fhkiel.temi.robogguide.real.Location
@@ -80,24 +84,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
         Log.i("test3" , isInd.toString())
 
 
-
-
-
-
-
-
-        //mTourManager.createLongTour(selectedLocations, true)
-        //mTourManager.registerAsTourStopListener{doTourStop()}
-
-
-
-/*
-        val mediaItems : List<Text> = DataLoader.places[2].locations[1].texts
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-
-
-
- */     val btnStop = findViewById<Button>(R.id.btnStop)
+        val btnStop = findViewById<Button>(R.id.btnStop)
         btnStop.visibility = Button.GONE
         findViewById<Button>(R.id.btnStop).setOnClickListener(){
             mRobot.cancelAllTtsRequests()
@@ -109,7 +96,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
             btnStop.visibility = Button.VISIBLE
 
             if(isShort && !isLong){isShort = true}
-            if(!isShort && isLong){isShort = false}
+            if(!isShort && isLong){isShort = false; isLong = true}
 
             if(isDetailed && !isUndetailed){isDetailed = true}
             if(!isDetailed && isUndetailed){isDetailed = false}
@@ -117,8 +104,6 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
             if(isInd){
                 isDetailed = false
                 isShort = false
-                Log.i("test3", isDetailed.toString())
-                Log.i("test4", isShort.toString())
             }
 
 
@@ -126,7 +111,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
                 mTourManager = TourManager(mRobot,DataLoader.transfers)
                 mTourManager.createShortTour(DataLoader.places[indexP].locations.toMutableList(),isDetailed)
                 mTourManager.registerAsTourStopListener { doTourStop() }
-            }else if (!isShort){
+            }else if (isLong){
                 mTourManager = TourManager(mRobot,DataLoader.transfers)
                 mTourManager.createLongTour(DataLoader.places[indexP].locations.toMutableList(),isDetailed)
                 mTourManager.registerAsTourStopListener { doTourStop() }
@@ -134,15 +119,7 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
                 mTourManager = TourManager(mRobot,DataLoader.transfers)
                 mTourManager.createIndTour(selectedLocations, isDetailed)
                 mTourManager.registerAsTourStopListener { doTourStop() }
-
             }
-
-            if(stoppedFlag){
-                //if the Tour is stopped than go to the last visited location
-                mTourManager.mRobot.goTo(mTourManager.currentLocation.name)
-            }
-
-
         }
 
     }
@@ -167,17 +144,19 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
 
             //speak every location for each item
-            mTourManager.currentLocation.items.forEachIndexed { index, it ->
-                runOnUiThread{
+            mTourManager.currentLocation.items.forEachIndexed { itemIndex, it ->
+                runOnUiThread {
                     itemsText.text = it.name
-                    if(!it.texts[index].mediaUrls[index].contains("youtube")) {
-                        Picasso.get().load(it.texts[index].mediaUrls[index]).into(imageItem)
+                    it.texts.forEach { t ->
+                        t.mediaUrls.forEach { m ->
+                            if (!m.contains("youtube")) {
+                                Picasso.get().load(m).into(imageItem)
+                            }
+                        }
                     }
                 }
                 mTourManager.speakTexts(it.texts)
-
             }
-
 
 
 
@@ -198,6 +177,8 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
                 mTourManager.currentLocation = nextLocation
             }else if(nextLocationIndex == mTourManager.locationsToVisit.size){
+                mTourManager.speak("Das war es mit der Tour, ich hoffe es hat Ihnen gefallen. Bitte bewerten wie sie die Tour fanden")
+                sleep(2000)
                 val intent = Intent(this, FeedbackActivity::class.java)
                 startActivity(intent)
             }
@@ -240,10 +221,14 @@ class TourViewActivity(): AppCompatActivity(), OnRobotReadyListener, OnGoToLocat
 
         if(status == OnGoToLocationStatusChangedListener.ABORT)
         {
+            mRobot.stopMovement()
             mTourManager.speak("Tut mir Leid, es ist wohl ein Fehler aufgetreten, bitte starte die Tour neu")
             sleep(1000)
+            mRobot.cancelAllTtsRequests()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+
+
         }
 
 

@@ -23,7 +23,6 @@ class TourManager(
     init {
         mRobot.addOnGoToLocationStatusChangedListener(this)
         mRobot.addTtsListener(this)
-
         Log.i("TourManager", "Registered")
     }
 
@@ -42,13 +41,11 @@ class TourManager(
     }
 
 
-
-
-
     fun createLongTour(listLocations: MutableList<Location>, detailed: Boolean) {
         //filter by important locations
         detailedFlag = detailed
         locationsToVisit = listLocations
+        Log.i("Inside createLongTour", locationsToVisit.toString())
 
         if (locationsToVisit.isNotEmpty()) {
             currentLocation = locationsToVisit[0]
@@ -60,7 +57,7 @@ class TourManager(
     fun createIndTour(listLocations: MutableList<Location>, detailed: Boolean){
         detailedFlag = detailed
         locationsToVisit = listLocations
-
+        Log.i("Inside createIndTour", locationsToVisit.toString())
         if (locationsToVisit.isNotEmpty()) {
             currentLocation = locationsToVisit[0]
             mRobot.goTo(currentLocation.name)
