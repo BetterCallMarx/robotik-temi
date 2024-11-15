@@ -20,8 +20,8 @@
 
     <Button
         android:id="@+id/btnExitApp"
-        android:layout_width="84dp"
-        android:layout_height="0dp"
+        android:layout_width="113dp"
+        android:layout_height="71dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:drawableEnd="@drawable/baseline_exit_to_app_24"
@@ -55,5 +55,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_give_feedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Gebe Feedback "
+        app:layout_constraintBottom_toTopOf="@+id/Tour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

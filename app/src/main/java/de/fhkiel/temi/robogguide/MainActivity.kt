@@ -54,6 +54,13 @@ class MainActivity : AppCompatActivity(), OnRobotReadyListener {
             startActivity(intent)
         }
 
+        // Feedback anzeigen Button
+        val buttonViewFeedback = findViewById<Button>(R.id.button_give_feedback)
+        buttonViewFeedback.setOnClickListener {
+            val intent = Intent(this, FeedbackActivity::class.java)
+            startActivity(intent)
+        }
+
 
 
         findViewById<Button>(R.id.btnGotoHomeBase).setOnClickListener {

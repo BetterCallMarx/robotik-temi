@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
 class FeedbackActivity : AppCompatActivity() {
 
     private lateinit var buttonGood: Button
@@ -56,8 +55,10 @@ class FeedbackActivity : AppCompatActivity() {
 
         // Speichere Feedback in einer Textdatei
         saveFeedbackToFile(feedback)
-        createAndSaveTxtFile("de.fhkiel.temi.robogguide","feedbacks","test.txt","test")
-        intent = Intent(this,MainActivity::class.java)
+        createAndSaveTxtFile("feedbacks", "test.txt", "test")
+
+        // Zurück zur MainActivity navigieren
+        intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
@@ -70,10 +71,10 @@ class FeedbackActivity : AppCompatActivity() {
         file.appendText("Feedback: $feedback\n")
     }
 
-    fun createAndSaveTxtFile(baseDir: String, subDir: String, fileName: String, content: String): Boolean {
+    private fun createAndSaveTxtFile(subDir: String, fileName: String, content: String): Boolean {
         try {
-            // Create the subdirectory if it doesn't exist
-            val directory = File(baseDir, subDir)
+            // Erstelle das Unterverzeichnis im internen Speicherverzeichnis
+            val directory = File(filesDir, subDir)
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {
                     println("Failed to create directory: $directory")
@@ -81,9 +82,9 @@ class FeedbackActivity : AppCompatActivity() {
                 }
             }
 
-            // Create the file within the subdirectory
+            // Erstelle die Datei innerhalb des Unterverzeichnisses und schreibe den Inhalt
             val file = File(directory, fileName)
-            file.writeText(content) // Write content to the file
+            file.writeText(content) // Inhalt in die Datei schreiben
             println("File created successfully at: ${file.absolutePath}")
             return true
         } catch (e: IOException) {
