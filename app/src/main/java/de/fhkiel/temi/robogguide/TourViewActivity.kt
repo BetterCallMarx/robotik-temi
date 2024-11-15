@@ -83,16 +83,17 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
 
 
         val btnStop = findViewById<Button>(R.id.btnStop)
+        val btnStart = findViewById<Button>(R.id.btnStart)
+
         btnStop.visibility = Button.GONE
         findViewById<Button>(R.id.btnStop).setOnClickListener() {
-            mRobot.cancelAllTtsRequests()
-            mRobot.stopMovement()
-            stoppedFlag = true
-        }
+            btnStart.visibility = Button.VISIBLE
+            btnStart.text = "Tour neustarten"
 
+        }
         findViewById<Button>(R.id.btnStart).setOnClickListener {
             btnStop.visibility = Button.VISIBLE
-
+            btnStart.visibility = Button.GONE
             if (isShort && !isLong) {
                 isShort = true
             }
@@ -136,6 +137,7 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
                 progressBar.max = mTourManager.locationsToVisit.size
 
             }
+
         }
 
     }
@@ -155,16 +157,16 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
             mTourManager.currentLocation.items.forEachIndexed { itemIndex, it ->
                 runOnUiThread {
                     itemsText.text = it.name
-                    /*
                     it.texts.forEach { t ->
                         t.mediaUrls.forEach { m ->
                             if (!m.contains("youtube")) {
+                                Log.i("Picasso","Test")
                                 Picasso.get().load(m).into(imageItem)
+                                sleep(500)
                             }
                         }
                     }
 
-                     */
                 }
                 mTourManager.speakTexts(it.texts)
             }

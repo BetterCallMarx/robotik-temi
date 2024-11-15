@@ -34,11 +34,11 @@
         android:id="@+id/Tour"
         android:layout_width="166dp"
         android:layout_height="94dp"
-        android:layout_marginTop="476dp"
-        android:layout_marginEnd="536dp"
         android:drawablePadding="@dimen/btnIconPadding"
         android:text="Starte eine Tour"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
