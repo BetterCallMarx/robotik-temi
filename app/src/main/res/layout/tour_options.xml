@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:padding="32dp"
     android:gravity="center_horizontal">
 
     <!-- Titel der Seite -->
@@ -10,48 +10,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wählen Sie die Art der Führung"
-        android:textSize="50sp"
+        android:textSize="60sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="24dp" />
+        android:paddingBottom="32dp" />
 
     <!-- Kurz oder Lang Auswahl -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dauer der Führung"
-        android:textSize="25sp"
-        android:paddingBottom="12dp" />
+        android:textSize="30sp"
+        android:paddingBottom="16dp" />
 
     <RadioGroup
         android:id="@+id/radioGroupDauer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="16dp">
+        android:paddingBottom="24dp">
 
         <RadioButton
             android:id="@+id/rbKurz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Kurz"
-            android:textSize="20dp"/>
+            android:textSize="25sp"
+            android:padding="8dp" />
 
         <RadioButton
             android:id="@+id/rbLang"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lang"
-            android:textSize="20dp"
-            android:layout_marginStart="24dp" />
+            android:textSize="25sp"
+            android:layout_marginStart="32dp"
+            android:padding="8dp" />
 
         <RadioButton
             android:id="@+id/rbIndividuell"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Individuell"
-            android:textSize="20dp"
-            android:layout_marginStart="24dp" />
+            android:textSize="25sp"
+            android:layout_marginStart="32dp"
+            android:padding="8dp" />
     </RadioGroup>
 
     <!-- Einfach oder Ausführlich Auswahl -->
@@ -59,31 +62,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Umfang der Erklärung"
-        android:textSize="25dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="12dp" />
+        android:textSize="30sp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp" />
 
     <RadioGroup
         android:id="@+id/radioGroupUmfang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="16dp">
+        android:paddingBottom="24dp">
 
         <RadioButton
             android:id="@+id/rbEinfach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Einfach"
-            android:textSize="20dp"/>
+            android:textSize="25sp"
+            android:padding="8dp" />
 
         <RadioButton
             android:id="@+id/rbAusführlich"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ausführlich"
-            android:textSize="20dp"
-            android:layout_marginStart="24dp" />
+            android:textSize="25sp"
+            android:layout_marginStart="32dp"
+            android:padding="8dp" />
     </RadioGroup>
 
     <!-- Bestätigungsbutton -->
@@ -92,17 +97,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bestätigen"
+        android:textSize="25sp"
         android:visibility="gone"
         android:layout_gravity="center_horizontal"
-        android:padding="12dp" />
+        android:padding="16dp" />
 
-    <!-- TextViews für die aktuellen Auswahlen, alles in einer Zeile -->
+
+    <!-- TextViews für die aktuellen Auswahlen -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:paddingTop="16dp">
+        android:paddingTop="24dp">
 
         <TextView
             android:id="@+id/tvDauerAuswahl"
@@ -110,7 +118,7 @@
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
             android:text="Dauer der Führung: Nicht ausgewählt"
-            android:textSize="20dp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/tvUmfangAuswahl"
@@ -118,7 +126,7 @@
             android:layout_height="wrap_content"
             android:paddingEnd="16dp"
             android:text="Umfang der Erklärung: Nicht ausgewählt"
-            android:textSize="20dp" />
+            android:textSize="25sp" />
     </LinearLayout>
 
     <TextView
@@ -126,7 +134,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="24dp"/>
+        android:paddingTop="32dp" />
+
+    <Button
+        android:id="@+id/btnBackToLevelSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:textSize="23sp"
+        android:padding="12dp"
+        android:text="Zurück" />
 </LinearLayout>

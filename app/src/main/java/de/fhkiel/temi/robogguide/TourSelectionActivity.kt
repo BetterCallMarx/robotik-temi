@@ -124,6 +124,24 @@ class TourSelectionActivity : AppCompatActivity() {
 
             }
 
+            }
+
+        // Button für den Zurück-Navigation
+        val btnBackToLevelSelect = findViewById<Button>(R.id.btnBackToLevelSelect)
+        btnBackToLevelSelect.setOnClickListener {
+            // Lösche den gespeicherten Ort (falls notwendig)
+            val sharedPrefs = getSharedPreferences("TourPrefs", MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor.remove("selectedPlace") // Entferne den gespeicherten Ort
+            editor.apply()
+
+            // Starte die LevelSelect-Activity
+            val intent = Intent(this, LevelSelect::class.java)
+            startActivity(intent)
+            finish() // Schließe diese Activity
+
+
         }
     }
 }
+

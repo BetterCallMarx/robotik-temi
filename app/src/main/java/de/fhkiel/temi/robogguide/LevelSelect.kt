@@ -44,5 +44,17 @@ class LevelSelect : AppCompatActivity() {
             // Starte die TourSelectionActivity und übergebe den Ort
             startActivity(intent)
         }
+
+        // Button zum Zurückkehren zur MainActivity
+        findViewById<Button>(R.id.buttonBackToMain).setOnClickListener {
+            // Intent, um zur MainActivity zu navigieren
+            val intent = Intent(this, MainActivity::class.java)
+
+            // Starte die MainActivity
+            startActivity(intent)
+
+            // Beende die aktuelle Activity, um den Zurück-Stack zu bereinigen
+            finish()
+        }
     }
 }
