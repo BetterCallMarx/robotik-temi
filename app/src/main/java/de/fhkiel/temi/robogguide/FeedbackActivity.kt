@@ -11,8 +11,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Activity zur aufnahme vom feedback der benutzer.
+ * Der benutzer kann zwischen gut, neural und schlecht wählen, und das feedback
+ * wird in einer datei gespeichert. nach der auswahl wird der benutzer zur MainActivity
+ * zurückgeleitet.
+ */
 class FeedbackActivity : AppCompatActivity() {
 
+    // buttons für die Feedback auswahl
     private lateinit var buttonGood: Button
     private lateinit var buttonNeutral: Button
     private lateinit var buttonBad: Button
@@ -21,10 +28,12 @@ class FeedbackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feedback)
 
+        // Initialisierung der Buttons aus dem layout
         buttonGood = findViewById(R.id.button_good)
         buttonNeutral = findViewById(R.id.button_neutral)
         buttonBad = findViewById(R.id.button_bad)
 
+        // Setze Klick Listener für jeden Button
         buttonGood.setOnClickListener {
             selectFeedback(buttonGood, Color.GREEN, "Gut")
         }
@@ -38,11 +47,15 @@ class FeedbackActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * kümmert sich um  die Auswahl eines Feedbacks, passt die button farbem an, speichert das feedback
+     * und navigiert zurück zur MainActivity.
+     */
     private fun selectFeedback(selectedButton: Button, color: Int, feedback: String) {
-        // Set color for selected button
+        // setzt die fabe für der button
         selectedButton.setBackgroundColor(color)
 
-        // Reset color for other buttons
+        // setzt die standartfarbe der nicht ausgewählten buttons zurück
         if (selectedButton != buttonGood) {
             buttonGood.setBackgroundColor(getColor(android.R.color.holo_green_light))
         }
@@ -53,27 +66,42 @@ class FeedbackActivity : AppCompatActivity() {
             buttonBad.setBackgroundColor(getColor(android.R.color.holo_red_light))
         }
 
-        // Speichere Feedback in einer Textdatei
+        // speichert das Feedback in einer Datei
         saveFeedbackToFile(feedback)
         createAndSaveTxtFile("feedbacks", "test.txt", "test")
 
-        // Zurück zur MainActivity navigieren
+        // naviegiert zurück zur MainActivity
         intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
+    /**
+     * Speichert das Feedback des Benutzers in einer Textdatei. Der Dateiname
+     * enthält das aktuelle Datum.
+     *
+     * @param feedback Der text des feedbacks der gespeichert wird.
+     */
     private fun saveFeedbackToFile(feedback: String) {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = dateFormat.format(Date())
-        val fileName = "$date-feedback.txt"
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) // Datumsformat
+        val date = dateFormat.format(Date()) // Aktuelles Datum
+        val fileName = "$date-feedback.txt" // Dateiname mit Datum
 
+        // Datei im internen Speicher erstellen oder öffnen
         val file = File(filesDir, fileName)
-        file.appendText("Feedback: $feedback\n")
+        file.appendText("Feedback: $feedback\n") // Feedback anhängen
     }
 
+    /**
+     * erstellt die Textdatei in einem Unterverzeichnis und speichert den angegebenen inhalt.
+     *
+     * @param subDir Der name des unterverzeichnis, in dem die datei erstellt wird.
+     * @param fileName Der name der datei die erstellt wird.
+     * @param content Der inhalt, der in die datei geschrieben wird.
+     * @return true wenn die Datei erfolgreich erstellt wurde, andernfalls false
+     */
     private fun createAndSaveTxtFile(subDir: String, fileName: String, content: String): Boolean {
         try {
-            // Erstelle das Unterverzeichnis im internen Speicherverzeichnis
+            // erstellt das Unterverzeichnis im internen speicherverzeichnis
             val directory = File(filesDir, subDir)
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {
@@ -82,7 +110,7 @@ class FeedbackActivity : AppCompatActivity() {
                 }
             }
 
-            // Erstelle die Datei innerhalb des Unterverzeichnisses und schreibe den Inhalt
+            // erstellt die datei innerhalb des unterverzeichnises und schreibe den inhalt
             val file = File(directory, fileName)
             file.writeText(content) // Inhalt in die Datei schreiben
             println("File created successfully at: ${file.absolutePath}")
