@@ -24,6 +24,11 @@ class FeedbackActivity : AppCompatActivity() {
     private lateinit var buttonNeutral: Button
     private lateinit var buttonBad: Button
 
+    /**
+     * method called on creation of activity
+     *
+     * @param savedInstanceState
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feedback)
@@ -49,7 +54,11 @@ class FeedbackActivity : AppCompatActivity() {
 
     /**
      * kümmert sich um  die Auswahl eines Feedbacks, passt die button farbem an, speichert das feedback
-     * und navigiert zurück zur MainActivity.
+     *   und navigiert zurück zur MainActivity.
+     *
+     * @param selectedButton
+     * @param color
+     * @param feedback
      */
     private fun selectFeedback(selectedButton: Button, color: Int, feedback: String) {
         // setzt die fabe für der button

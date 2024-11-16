@@ -77,7 +77,13 @@ class LocationSelectionActivity : AppCompatActivity() {
         }
     }
 
-   // Behandelt die auswahl oder abwahl eines zieles
+    /**
+     * Behandelt die auswahl oder abwahl eines zieles
+     *
+     * @param locationName
+     * @param btnConfirmLocation
+     * @param button
+     */
     private fun handleLocationSelection(
         locationName: String,
         btnConfirmLocation: Button,
