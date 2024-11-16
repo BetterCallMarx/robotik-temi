@@ -3,6 +3,14 @@ package de.fhkiel.temi.robogguide.database
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 
+/**
+ * orm data class for transfers table
+ *
+ * @property id
+ * @property title
+ * @property location_from
+ * @property location_to
+ */
 @DatabaseTable(tableName = "transfers")
 data class Transfers (
 

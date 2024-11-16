@@ -80,5 +80,16 @@
         app:layout_constraintVertical_bias="0.947"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="133dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="529dp"
+        android:text="Zurück zum Hauptmenü"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/itemImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tourProgress" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

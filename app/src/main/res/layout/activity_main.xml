@@ -7,18 +7,6 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btnGotoHomeBase"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/btnHeight"
-        android:layout_marginStart="72dp"
-        android:layout_marginBottom="16dp"
-        android:drawableStart="@drawable/baseline_home_24"
-        android:drawablePadding="@dimen/btnIconPadding"
-        android:text="@string/btnGotoHomeBase"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/btnExitApp"
         android:layout_width="113dp"
         android:layout_height="71dp"
@@ -55,21 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_give_feedback"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Gebe Feedback "
-        app:layout_constraintBottom_toTopOf="@+id/Tour"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.015"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

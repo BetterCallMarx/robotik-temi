@@ -3,7 +3,13 @@ package de.fhkiel.temi.robogguide.database
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 
-
+/**
+ * Orm Data class to get the Media table
+ *
+ * @property id
+ * @property url
+ * @property texts_id
+ */
 @DatabaseTable(tableName = "media")
 data class Media (
     @DatabaseField(generatedId = true, columnName = "id")

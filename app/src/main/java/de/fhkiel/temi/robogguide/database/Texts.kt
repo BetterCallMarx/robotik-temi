@@ -3,6 +3,17 @@ package de.fhkiel.temi.robogguide.database
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 
+/**
+ * orm data class for texts table
+ *
+ * @property id
+ * @property title
+ * @property text
+ * @property detailed
+ * @property locations_id
+ * @property items_id
+ * @property transfers_id
+ */
 @DatabaseTable(tableName = "texts")
 data class Texts(
     @DatabaseField(generatedId = true, columnName = "id")

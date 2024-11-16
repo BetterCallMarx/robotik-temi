@@ -17,7 +17,8 @@ private const val DATABASE_NAME = "roboguide.db"
 private const val DATABASE_VERSION = 1
 private const val TAG = "OrmHelper"
 
-class OrmHelper(val context : Context) : OrmLiteSqliteOpenHelper(context,DATABASE_NAME, null, DATABASE_VERSION) {
+class OrmHelper(val context: Context) :
+    OrmLiteSqliteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 
     // DAOs for each table
@@ -30,11 +31,17 @@ class OrmHelper(val context : Context) : OrmLiteSqliteOpenHelper(context,DATABAS
     val transfersDao: Dao<Transfers, Int> =
         DaoManager.createDao(connectionSource, Transfers::class.java)
 
-
+    /**
+     * copy Database at init of onject
+     */
     init {
         copyDatabase()
     }
 
+    /**
+     * Method to copy the Database
+     *
+     */
     private fun copyDatabase() {
 
         val inputStream: InputStream = context.assets.open(databaseName)
@@ -53,20 +60,30 @@ class OrmHelper(val context : Context) : OrmLiteSqliteOpenHelper(context,DATABAS
     }
 
 
-    //function called upon creating database
+    /**
+     * function called upon creation of database, mandatory override from inheritance of ORMLiteSqlHelper
+     *
+     * @param database
+     * @param connectionSource
+     */
     override fun onCreate(database: SQLiteDatabase?, connectionSource: ConnectionSource?) {
 
     }
 
-
-    //called when the database is upgraded
+    /**
+     * called when database is upgraded
+     *
+     * @param database
+     * @param connectionSource
+     * @param oldVersion
+     * @param newVersion
+     */
     override fun onUpgrade(
         database: SQLiteDatabase?,
         connectionSource: ConnectionSource?,
         oldVersion: Int,
         newVersion: Int
     ) {
-
 
 
     }

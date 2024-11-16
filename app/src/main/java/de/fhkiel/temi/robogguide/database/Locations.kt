@@ -3,6 +3,14 @@ package de.fhkiel.temi.robogguide.database
 import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.table.DatabaseTable
 
+/**
+ * Orm Data class to get the locations table
+ *
+ * @property id
+ * @property name
+ * @property important
+ * @property places_id
+ */
 @DatabaseTable(tableName = "locations")
 data class Locations(
 

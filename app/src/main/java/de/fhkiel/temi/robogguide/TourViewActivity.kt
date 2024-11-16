@@ -48,7 +48,11 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
     private lateinit var progressBar: ProgressBar
     var stoppedFlag: Boolean = false
 
-
+    /**
+     * Method called upon creation of this activity
+     *
+     * @param savedInstanceState
+     */
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,13 +88,31 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
 
         val btnStop = findViewById<Button>(R.id.btnStop)
         val btnStart = findViewById<Button>(R.id.btnStart)
+        val btnCancel = findViewById<Button>(R.id.btnCancel)
 
+        btnCancel.visibility = Button.GONE
         btnStop.visibility = Button.GONE
+        /**
+         * Button to pause the Tour
+         */
         findViewById<Button>(R.id.btnStop).setOnClickListener() {
             btnStart.visibility = Button.VISIBLE
             btnStart.text = "Tour neustarten"
-
+            btnCancel.visibility = Button.VISIBLE
         }
+        /**
+         * Button to cancel the tour entirely and return to the Mainactivity
+         */
+        findViewById<Button>(R.id.btnCancel).setOnClickListener(){
+            val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        /**
+         * Button to start the tour, upon which
+         * the tour is created, based of the settings from the previous activity and
+         * the custom listener is registered
+         */
         findViewById<Button>(R.id.btnStart).setOnClickListener {
             btnStop.visibility = Button.VISIBLE
             btnStart.visibility = Button.GONE
@@ -116,16 +138,14 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
             if (isShort) {
                 mTourManager = TourManager(mRobot, DataLoader.transfers)
                 mTourManager.createShortTour(
-                    DataLoader.places[indexP].locations.toMutableList(),
-                    isDetailed
+                    DataLoader.places[indexP].locations.toMutableList(), isDetailed
                 )
                 mTourManager.registerAsTourStopListener { doTourStop() }
                 progressBar.max = mTourManager.locationsToVisit.size
             } else if (isLong) {
                 mTourManager = TourManager(mRobot, DataLoader.transfers)
                 mTourManager.createLongTour(
-                    DataLoader.places[indexP].locations.toMutableList(),
-                    isDetailed
+                    DataLoader.places[indexP].locations.toMutableList(), isDetailed
                 )
                 mTourManager.registerAsTourStopListener { doTourStop() }
                 progressBar.max = mTourManager.locationsToVisit.size
@@ -142,7 +162,12 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
 
     }
 
-
+    /**
+     * Method that handles the mechanism of a tour, at the end of a tour the FeedbackActivity is called
+     * This method is added to the custom listener method
+     *
+     *
+     */
     fun doTourStop() {
         thread {
             runOnUiThread {
@@ -160,7 +185,7 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
                     it.texts.forEach { t ->
                         t.mediaUrls.forEach { m ->
                             if (!m.contains("youtube")) {
-                                Log.i("Picasso","Test")
+                                Log.i("Picasso", "Test")
                                 Picasso.get().load(m).into(imageItem)
                                 sleep(500)
                             }
@@ -204,20 +229,37 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
 
     }
 
+    /**
+     * method called upon start of robot
+     *
+     */
     override fun onStart() {
         super.onStart()
         Robot.getInstance().addOnRobotReadyListener(this)
     }
 
+    /**
+     * Method called upon stop of robot
+     *
+     */
     override fun onStop() {
         super.onStop()
         Robot.getInstance().removeOnRobotReadyListener(this)
     }
 
+    /**
+     * Method called upon destruct of robot
+     *
+     */
     override fun onDestroy() {
         super.onDestroy()
     }
 
+    /**
+     * Method called readiness of robot, instansiated the robot and adds listeners
+     *
+     * @param isReady
+     */
     override fun onRobotReady(isReady: Boolean) {
         if (isReady) {
             mRobot = Robot.getInstance()
@@ -231,11 +273,16 @@ class TourViewActivity() : AppCompatActivity(), OnRobotReadyListener,
 
     }
 
+    /**
+     * Listener for the status of the movement of the robot, if a destination is aborted, the user is requested to start a new Tour
+     *
+     * @param location
+     * @param status
+     * @param descriptionId
+     * @param description
+     */
     override fun onGoToLocationStatusChanged(
-        location: String,
-        status: String,
-        descriptionId: Int,
-        description: String
+        location: String, status: String, descriptionId: Int, description: String
     ) {
 
         if (status == OnGoToLocationStatusChangedListener.ABORT) {
